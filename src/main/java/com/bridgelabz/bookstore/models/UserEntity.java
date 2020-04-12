@@ -33,6 +33,7 @@ public class UserEntity {
     @CollectionTable(name = "user_addresses", joinColumns = @JoinColumn(name = "user_id"))
     private List<Address> addresses;
     @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     private List<Role> roles;
 
     public UserEntity() {

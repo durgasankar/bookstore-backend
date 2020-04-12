@@ -14,7 +14,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Address {
 
-    private long user_id;
     private final String street;
     private final String town;
     private final String district;
@@ -74,10 +73,6 @@ public class Address {
         }
     }
 
-    public long getUser_id() {
-        return user_id;
-    }
-
     public String getStreet() {
         return street;
     }
@@ -101,5 +96,6 @@ public class Address {
     public int getPinCode() {
         return pinCode;
     }
+
 
 }

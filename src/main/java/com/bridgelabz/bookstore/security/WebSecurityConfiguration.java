@@ -33,8 +33,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticated();
         http.exceptionHandling()
                 .accessDeniedPage( "/login" );
-        super.configure( http );
-
     }
 
     @Bean
