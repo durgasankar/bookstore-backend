@@ -128,4 +128,21 @@ public class UserEntity {
     public void setRoles( List<Role> roles ) {
         this.roles = roles;
     }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "userId=" + userId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", mobileNumber=" + mobileNumber +
+                ", emailId='" + emailId + '\'' +
+                ", password='" + password + '\'' +
+                ", createdDateTime='" + createdDateTime + '\'' +
+                ", isVerified=" + isVerified +
+                ", addresses=" + addresses +
+                ", roles=" + roles +
+                '}';
+    }
 }

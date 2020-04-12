@@ -110,10 +110,10 @@ public class EmailServiceProvider {
      * @throws  MailSendingException custom exception
      */
     @RabbitListener(queues = "rmq.rube.queue")
-    public void receivedMessage( MailObject mailObject ) {
+    public void receivedMessage( MailObject mailObject ) throws MailSendingException {
 
         if (sendMail( mailObject.getEmail(), mailObject.getSubject(), mailObject.getMessage() ))
             return;
-        throw new MailSendingException( "Oops...Error Sending mail!", HttpStatus.BAD_GATEWAY );
+        throw new MailSendingException( "Oops...Error Receiving mail from RabbitMQ server", HttpStatus.BAD_GATEWAY );
     }
 }
