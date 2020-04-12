@@ -41,42 +41,42 @@ public class JwtTokenProvider {
     private MyUserDetails myUserDetails;
 
     public String createToken( String userName, List<Role> roles ) {
-        Claims claims = Jwts.claims().setSubject( userName );
-        claims.put( "auth", roles.stream()
-                .map( role -> new SimpleGrantedAuthority( role.getAuthority() ) )
-                .filter( Objects :: nonNull )
-                .collect( Collectors.toList() ) );
-        Date now = new Date();
-        Date validity = new Date( now.getTime() + VALIDITY_PERIOD_IN_MILLISECOND );
-        return Jwts.builder()
-                .setClaims( claims )
-                .setIssuedAt( now )
-                .setExpiration( validity )
-                .signWith( SignatureAlgorithm.HS256, SECRET_KEY )
-                .compact();
+        Claims claims = Jwts.claims ().setSubject (userName);
+        claims.put ("auth", roles.stream ()
+                .map (role -> new SimpleGrantedAuthority (role.getAuthority ()))
+                .filter (Objects :: nonNull)
+                .collect (Collectors.toList ()));
+        Date now = new Date ();
+        Date validity = new Date (now.getTime () + VALIDITY_PERIOD_IN_MILLISECOND);
+        return Jwts.builder ()
+                .setClaims (claims)
+                .setIssuedAt (now)
+                .setExpiration (validity)
+                .signWith (SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact ();
     }
 
     public boolean isVerifiedUser( String token ) {
         try {
-            Jwts.parser().setSigningKey( SECRET_KEY ).parseClaimsJws( token );
+            Jwts.parser ().setSigningKey (SECRET_KEY).parseClaimsJws (token);
             return true;
         } catch (JwtException | IllegalArgumentException ex) {
-            throw new AuthenticationException( "Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR );
+            throw new AuthenticationException ("Expired or invalid JWT token", HttpStatus.UNAUTHORIZED);
 
         }
     }
 
     public Authentication getAuthenticatedUser( String token ) {
-        UserDetails fetchedUserDetails = myUserDetails.loadUserByUsername( getUserName( token ) );
-        return new UsernamePasswordAuthenticationToken( fetchedUserDetails, "", fetchedUserDetails.getAuthorities() );
+        UserDetails fetchedUserDetails = myUserDetails.loadUserByUsername (getUserName (token));
+        return new UsernamePasswordAuthenticationToken (fetchedUserDetails, "", fetchedUserDetails.getAuthorities ());
 
     }
 
     public String getUserName( String token ) {
-        return Jwts.parser()
-                .setSigningKey( SECRET_KEY )
-                .parseClaimsJws( token )
-                .getBody()
-                .getSubject();
+        return Jwts.parser ()
+                .setSigningKey (SECRET_KEY)
+                .parseClaimsJws (token)
+                .getBody ()
+                .getSubject ();
     }
 }

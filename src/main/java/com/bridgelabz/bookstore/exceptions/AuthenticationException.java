@@ -22,9 +22,11 @@ public class AuthenticationException extends RuntimeException {
      * @param httpStatus as Integer input parameter
      */
     public AuthenticationException( String message, HttpStatus httpStatus ) {
-        super( message );
+        super (message);
         this.httpStatus = httpStatus;
     }
 
-
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
 }

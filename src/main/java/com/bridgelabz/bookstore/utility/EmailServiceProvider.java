@@ -110,7 +110,7 @@ public class EmailServiceProvider {
      * @throws  MailSendingException custom exception
      */
     @RabbitListener(queues = "rmq.rube.queue")
-    public void recievedMessage( MailObject mailObject ) {
+    public void receivedMessage( MailObject mailObject ) {
 
         if (sendMail( mailObject.getEmail(), mailObject.getSubject(), mailObject.getMessage() ))
             return;
