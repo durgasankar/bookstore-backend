@@ -11,6 +11,7 @@ import com.bridgelabz.bookstore.utility.Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -73,13 +74,19 @@ public class UserServiceImplementation implements IUserService {
         return false;
     }
 
-    private MailObject mailContent( UserEntity fetchedUser ) {
+    private MailObject mailContent( final UserEntity fetchedUser ) {
         String emailId = fetchedUser.getEmailId ();
         String bodyContent = Util.createLink (
                 Util.IP_ADDRESS + Util.SPRING_PORT_NUMBER + Util.REGISTRATION_VERIFICATION_LINK,
                 jwtTokenProvider.createToken (fetchedUser.getUserName (), fetchedUser.getRoles ()));
         String subject = Util.REGISTRATION_EMAIL_SUBJECT;
         return new MailObject (emailId, subject, bodyContent);
+    }
+
+    @Override
+    public  boolean isVerifiedUser( final String token ) {
+       userRepository.verifyTheUser(jwtTokenProvider.getUserName (token));
+        return true;
     }
 
 }

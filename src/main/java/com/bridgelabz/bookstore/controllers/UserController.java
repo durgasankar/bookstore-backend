@@ -1,15 +1,15 @@
 package com.bridgelabz.bookstore.controllers;
 
 import com.bridgelabz.bookstore.dto.UserDto;
+import com.bridgelabz.bookstore.models.UserEntity;
 import com.bridgelabz.bookstore.responses.Response;
 import com.bridgelabz.bookstore.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * By using the object reference of service class This class has the
@@ -31,8 +31,7 @@ public class UserController {
     private IUserService userService;
 
     @PostMapping("/registration")
-    public ResponseEntity<Response> registration( @RequestBody UserDto userDto ) {
-        System.out.println ("userDto controller  = " + userDto);
+    public ResponseEntity<Response> registration( @RequestBody final UserDto userDto ) {
         boolean isRegistered = userService.register (userDto);
         if (!isRegistered) {
             return ResponseEntity.status (HttpStatus.ALREADY_REPORTED)
@@ -40,6 +39,17 @@ public class UserController {
         }
         return ResponseEntity.status (HttpStatus.CREATED)
                 .body (new Response ("Registration successful... check your mail for verification!", 201));
+    }
+
+    @PutMapping("verification/{token}")
+    public ResponseEntity<Response> verifyRegistration( @PathVariable("token") final String token ) {
+        if (userService.isVerifiedUser (token)) {
+            return ResponseEntity.status (HttpStatus.OK)
+                    .body (new Response ("account verified successfully.", 200));
+        }
+        return ResponseEntity.status (HttpStatus.NOT_ACCEPTABLE)
+                .body (new Response ("Invalid verification attempt", 406));
+
     }
 
 

@@ -140,4 +140,9 @@ public class Testing implements UserRepository {
     public boolean existsByUserName( String userName ) {
         return false;
     }
+
+    @Override
+    public void verifyTheUser( String userName ) {
+
+    }
 }
