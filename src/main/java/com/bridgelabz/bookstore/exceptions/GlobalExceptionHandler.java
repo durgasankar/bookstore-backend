@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 /**
  * Global Exception Handler which handles all runtime exceptions like
- * {@link AuthenticationException}, {@link MailSendingException},
+ * {@link AuthenticationException}, {@link MailSendingException}, {@link UserNotFoundException},
  * layer itself.
  *
  * @author Durgasankar Mishra
@@ -27,6 +27,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MailSendingException.class)
     public ResponseEntity<Response> handelAllMailSendingExceptions( MailSendingException e ) {
         return ResponseEntity.status (HttpStatus.BAD_GATEWAY).body (new Response (e.getMessage (), e.getHttpStatus ()));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Response> handelAllUserExceptions( UserNotFoundException e ) {
+        return ResponseEntity.status (HttpStatus.NOT_FOUND).body (new Response (e.getMessage (), e.getHttpStatus ()));
     }
 
 }

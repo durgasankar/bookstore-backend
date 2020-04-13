@@ -132,7 +132,7 @@ public class Testing implements UserRepository {
     }
 
     @Override
-    public UserEntity findOneByUserName( String userName ) {
+    public Optional<UserEntity> findOneByUserName( String userName ) {
         return null;
     }
 

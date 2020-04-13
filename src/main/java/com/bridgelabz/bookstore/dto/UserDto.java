@@ -23,37 +23,65 @@ public class UserDto {
     private String emailId;
     private String password;
     @NotNull(message = "field should not be empty")
-    private String mobileNumber;
+    private long mobileNumber;
     private String userName;
     private List<Role> roles;
 
-    public String getFirstName() { return firstName; }
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public void setFirstName( String firstName ) { this.firstName = firstName; }
+    public void setFirstName( String firstName ) {
+        this.firstName = firstName;
+    }
 
-    public String getLastName() { return lastName; }
+    public String getLastName() {
+        return lastName;
+    }
 
-    public void setLastName( String lastName ) { this.lastName = lastName; }
+    public void setLastName( String lastName ) {
+        this.lastName = lastName;
+    }
 
-    public String getEmailId() { return emailId; }
+    public String getEmailId() {
+        return emailId;
+    }
 
-    public void setEmailId( String emailId ) { this.emailId = emailId; }
+    public void setEmailId( String emailId ) {
+        this.emailId = emailId;
+    }
 
-    public String getPassword() { return password; }
+    public String getPassword() {
+        return password;
+    }
 
-    public void setPassword( String password ) { this.password = password; }
+    public void setPassword( String password ) {
+        this.password = password;
+    }
 
-    public String getMobileNumber() { return mobileNumber; }
+    public long getMobileNumber() {
+        return mobileNumber;
+    }
 
-    public void setMobileNumber( String mobileNumber ) { this.mobileNumber = mobileNumber; }
+    public void setMobileNumber( long mobileNumber ) {
+        this.mobileNumber = mobileNumber;
+    }
 
-    public String getUserName() { return userName; }
+    public String getUserName() {
+        return userName;
+    }
 
-    public void setUserName( String userName ) { this.userName = userName; }
+    public void setUserName( String userName ) {
+        this.userName = userName;
+    }
 
-    public List<Role> getRoles() { return roles; }
+    public List<Role> getRoles() {
+        return roles;
+    }
 
-    public void setRoles( List<Role> roles ) { this.roles = roles; }
+    public void setRoles( List<Role> roles ) {
+        this.roles = roles;
+    }
 
     @Override
     public String toString() {

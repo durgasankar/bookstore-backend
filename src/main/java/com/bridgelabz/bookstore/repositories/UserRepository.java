@@ -4,6 +4,8 @@ import com.bridgelabz.bookstore.models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * JPA Repository interface for User Database Operations
  *
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    UserEntity findOneByUserName( String userName );
+    Optional<UserEntity> findOneByUserName( String userName );
 
     boolean existsByUserName( String userName );
 }

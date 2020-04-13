@@ -7,6 +7,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * User model which has the parameters which will hit with the database
+ *
+ * @author Durgasankar Mishra
+ * @version 1.1
+ * @created 2020-04-13
+ */
 @Entity
 @Table(name = "user")
 public class UserEntity {
@@ -37,8 +44,8 @@ public class UserEntity {
     private List<Role> roles;
 
     public UserEntity() {
-        this.addresses = new ArrayList<>();
-        this.roles = new LinkedList<>();
+        this.addresses = new ArrayList<> ();
+        this.roles = new LinkedList<> ();
     }
 
     public long getUserId() {

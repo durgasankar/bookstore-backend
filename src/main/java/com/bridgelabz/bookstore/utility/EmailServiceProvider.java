@@ -42,19 +42,19 @@ public class EmailServiceProvider {
      * @param bodyContain body contains of mail
      */
     private boolean sendMail( String toEmailId, String subject, String bodyContain ) {
-        Authenticator authentication = new Authenticator() {
+        Authenticator authentication = new Authenticator () {
 
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication( Util.SENDER_EMAIL_ID, Util.SENDER_PASSWORD );
+                return new PasswordAuthentication (Util.SENDER_EMAIL_ID, Util.SENDER_PASSWORD);
             }
         };
-        Session session = Session.getInstance( mailPropertiesSettings(), authentication );
+        Session session = Session.getInstance (mailPropertiesSettings (), authentication);
         try {
-            Transport.send( mimeMessageConfiguration( session, toEmailId, subject, bodyContain ) );
+            Transport.send (mimeMessageConfiguration (session, toEmailId, subject, bodyContain));
             return true;
         } catch (MessagingException e) {
-            throw new MailSendingException( "Oops...Error Sending mail to Server!", HttpStatus.BAD_GATEWAY );
+            throw new MailSendingException ("Oops...Error Sending mail to Server!", HttpStatus.BAD_GATEWAY);
         }
     }
 
@@ -70,20 +70,20 @@ public class EmailServiceProvider {
      */
     private MimeMessage mimeMessageConfiguration( Session session, String toEmail, String subject, String body ) {
 
-        MimeMessage mimeMessage = new MimeMessage( session );
+        MimeMessage mimeMessage = new MimeMessage (session);
         // set message headers
         try {
-            mimeMessage.addHeader( "Content-type", "text/HTML; charset=UTF-8" );
-            mimeMessage.addHeader( "format", "flowed" );
-            mimeMessage.addHeader( "Content-Transfer-Encoding", "8bit" );
-            mimeMessage.setFrom( new InternetAddress( Util.SENDER_EMAIL_ID, "Book Store Application" ) );
-            mimeMessage.setReplyTo( InternetAddress.parse( Util.SENDER_EMAIL_ID, false ) );
-            mimeMessage.setSubject( subject, "UTF-8" );
-            mimeMessage.setText( body, "UTF-8" );
-            mimeMessage.setSentDate( new Date() );
-            mimeMessage.setRecipients( Message.RecipientType.TO, InternetAddress.parse( toEmail, false ) );
+            mimeMessage.addHeader ("Content-type", "text/HTML; charset=UTF-8");
+            mimeMessage.addHeader ("format", "flowed");
+            mimeMessage.addHeader ("Content-Transfer-Encoding", "8bit");
+            mimeMessage.setFrom (new InternetAddress (Util.SENDER_EMAIL_ID, "Book Store Application"));
+            mimeMessage.setReplyTo (InternetAddress.parse (Util.SENDER_EMAIL_ID, false));
+            mimeMessage.setSubject (subject, "UTF-8");
+            mimeMessage.setText (body, "UTF-8");
+            mimeMessage.setSentDate (new Date ());
+            mimeMessage.setRecipients (Message.RecipientType.TO, InternetAddress.parse (toEmail, false));
         } catch (MessagingException | UnsupportedEncodingException e) {
-            e.printStackTrace();
+            e.printStackTrace ();
         }
         return mimeMessage;
     }
@@ -94,11 +94,11 @@ public class EmailServiceProvider {
      * @return Properties class
      */
     private Properties mailPropertiesSettings() {
-        Properties properties = new Properties();
-        properties.put( "mail.smtp.host", "smtp.gmail.com" ); // SMTP Host
-        properties.put( "mail.smtp.port", "587" ); // TLS Port
-        properties.put( "mail.smtp.auth", "true" ); // enable authentication
-        properties.put( "mail.smtp.starttls.enable", "true" ); // enable STARTTLS
+        Properties properties = new Properties ();
+        properties.put ("mail.smtp.host", "smtp.gmail.com"); // SMTP Host
+        properties.put ("mail.smtp.port", "587"); // TLS Port
+        properties.put ("mail.smtp.auth", "true"); // enable authentication
+        properties.put ("mail.smtp.starttls.enable", "true"); // enable STARTTLS
         return properties;
     }
 
@@ -107,13 +107,13 @@ public class EmailServiceProvider {
      * to the RabbitMQ Server.
      *
      * @param mailObject as {@link MailObject}
-     * @throws  MailSendingException custom exception
+     * @throws MailSendingException custom exception
      */
     @RabbitListener(queues = "rmq.rube.queue")
     public void receivedMessage( MailObject mailObject ) throws MailSendingException {
 
-        if (sendMail( mailObject.getEmail(), mailObject.getSubject(), mailObject.getMessage() ))
+        if (sendMail (mailObject.getEmail (), mailObject.getSubject (), mailObject.getMessage ()))
             return;
-        throw new MailSendingException( "Oops...Error Receiving mail from RabbitMQ server", HttpStatus.BAD_GATEWAY );
+        throw new MailSendingException ("Oops...Error Receiving mail from RabbitMQ server", HttpStatus.BAD_GATEWAY);
     }
 }

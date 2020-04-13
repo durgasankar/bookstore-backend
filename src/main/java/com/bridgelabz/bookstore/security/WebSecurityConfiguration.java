@@ -38,7 +38,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy (SessionCreationPolicy.STATELESS);
 //        allowed all request with full permission
         http.authorizeRequests ()
-                .antMatchers ("/users/registratio").permitAll ()
+                .antMatchers ("/users/registration").permitAll ()
                 .antMatchers ("/h2-console/**/**").permitAll ()
                 .anyRequest ()
                 .authenticated ();

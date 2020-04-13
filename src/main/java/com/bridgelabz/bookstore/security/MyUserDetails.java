@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * Implements UserDetailsService in order to define our own custom loadUserByUsername function.
  * The UserDetailsService interface is used to retrieve user-related data. It has one method named
@@ -17,8 +19,8 @@ import org.springframework.stereotype.Service;
  * load details about the user during authentication.
  *
  * @author Durgasankar Mishra
- * @created 2020-04-12
  * @version 1.0
+ * @created 2020-04-12
  * @see {@link UserDetailsService} provided services for authentication
  * @see {@link UserRepository} database operations for user
  * @see {@link User} class of spring checks the below functionality of user
@@ -31,16 +33,16 @@ public class MyUserDetails implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername( String username ) throws UsernameNotFoundException {
-        final UserEntity fetchedUser = userRepository.findOneByUserName( username );
-        if (fetchedUser == null)
-            throw new UsernameNotFoundException( "User ' " + username + " ' not found" );
-        return User.withUsername( fetchedUser.getUserName() )
-                .password( fetchedUser.getPassword() )
-                .authorities( fetchedUser.getRoles() )
-                .accountExpired( false )
-                .accountLocked( false )
-                .credentialsExpired( false )
-                .disabled( false )
-                .build();
+        final Optional<UserEntity> fetchedUser = userRepository.findOneByUserName (username);
+        if (!fetchedUser.isPresent ())
+            throw new UsernameNotFoundException ("User ' " + username + " ' not found");
+        return User.withUsername (fetchedUser.get ().getUserName ())
+                .password (fetchedUser.get ().getPassword ())
+                .authorities (fetchedUser.get ().getRoles ())
+                .accountExpired (false)
+                .accountLocked (false)
+                .credentialsExpired (false)
+                .disabled (false)
+                .build ();
     }
 }

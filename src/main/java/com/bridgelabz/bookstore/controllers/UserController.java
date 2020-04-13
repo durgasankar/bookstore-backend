@@ -11,6 +11,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * By using the object reference of service class This class has the
+ * functionality of getting connected with the user on the user specific request
+ * it will redirect to the respective controller method and carry out
+ * functionality of that particular request.
+ *
+ * @author Durgasankar Mishra
+ * @version 1.0
+ * @created 2020-04-13
+ * @see {@link IUserService} implementation of all the required functionality*
+ * @see {@link Response} if there is any type of response it will reflect out
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {
