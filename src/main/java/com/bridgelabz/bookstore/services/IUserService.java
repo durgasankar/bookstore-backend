@@ -1,10 +1,8 @@
 package com.bridgelabz.bookstore.services;
 
+import com.bridgelabz.bookstore.dto.LoginDto;
 import com.bridgelabz.bookstore.dto.UserDto;
 import com.bridgelabz.bookstore.exceptions.UserNotFoundException;
-import com.bridgelabz.bookstore.models.UserEntity;
-
-import java.util.Optional;
 
 /**
  * This interface has the UnImplemented functionality of registering the user
@@ -20,4 +18,6 @@ public interface IUserService {
     boolean register( UserDto newUserDto ) throws UserNotFoundException;
 
     boolean isVerifiedUser( String token );
+
+    UserLoginInfo login( LoginDto loginDto );
 }

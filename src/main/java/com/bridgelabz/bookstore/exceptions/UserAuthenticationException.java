@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
  * @version 1.0
  * @created 2020-04-12
  */
-public class AuthenticationException extends RuntimeException {
+public class UserAuthenticationException extends RuntimeException {
     private static final long serialVersionUID = 1L;
     private final HttpStatus httpStatus;
 
@@ -21,7 +21,7 @@ public class AuthenticationException extends RuntimeException {
      * @param message    as String input parameter
      * @param httpStatus as Integer input parameter
      */
-    public AuthenticationException( String message, HttpStatus httpStatus ) {
+    public UserAuthenticationException( String message, HttpStatus httpStatus ) {
         super (message);
         this.httpStatus = httpStatus;
     }

@@ -1,6 +1,6 @@
 package com.bridgelabz.bookstore.security;
 
-import com.bridgelabz.bookstore.exceptions.AuthenticationException;
+import com.bridgelabz.bookstore.exceptions.UserAuthenticationException;
 import com.bridgelabz.bookstore.models.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -29,14 +29,14 @@ import java.util.stream.Collectors;
  * @author Durgasankar Mishra
  * @version 1.0
  * @created 2020-04-12
- * @see {@link AuthenticationException} if user is not authenticated
+ * @see {@link UserAuthenticationException} if user is not authenticated
  * @see {@link Authentication} is the user is authenticated
  * @see {@link SimpleGrantedAuthority} defines the granted authorities of the user.
  */
 @Component
 public class JwtTokenProvider {
     private static final String SECRET_KEY = "r20jc134";
-    private static final long VALIDITY_PERIOD_IN_MILLISECOND = 3600000;// 1 hour
+    private static final long VALIDITY_PERIOD_IN_MILLISECOND = 24 * 60 * 60 * 1000;// 1 day
 
     @Autowired
     private MyUserDetails myUserDetails;
@@ -62,7 +62,7 @@ public class JwtTokenProvider {
             Jwts.parser ().setSigningKey (SECRET_KEY).parseClaimsJws (token);
             return true;
         } catch (JwtException | IllegalArgumentException ex) {
-            throw new AuthenticationException ("Expired or invalid JWT token", HttpStatus.UNAUTHORIZED);
+            throw new UserAuthenticationException ("Expired or invalid JWT token", HttpStatus.UNAUTHORIZED);
 
         }
     }

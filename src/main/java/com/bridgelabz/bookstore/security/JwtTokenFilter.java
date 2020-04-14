@@ -1,6 +1,6 @@
 package com.bridgelabz.bookstore.security;
 
-import com.bridgelabz.bookstore.exceptions.AuthenticationException;
+import com.bridgelabz.bookstore.exceptions.UserAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 Authentication auth = jwtTokenProvider.getAuthenticatedUser (token);
                 SecurityContextHolder.getContext ().setAuthentication (auth);
             }
-        } catch (AuthenticationException ex) {
+        } catch (UserAuthenticationException ex) {
             //this is very important, since it guarantees the user is not authenticated at all
             SecurityContextHolder.clearContext ();
             response.sendError (ex.getHttpStatus ().value (), ex.getMessage ());

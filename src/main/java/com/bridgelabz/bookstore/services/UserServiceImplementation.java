@@ -1,6 +1,8 @@
 package com.bridgelabz.bookstore.services;
 
+import com.bridgelabz.bookstore.dto.LoginDto;
 import com.bridgelabz.bookstore.dto.UserDto;
+import com.bridgelabz.bookstore.exceptions.UserAuthenticationException;
 import com.bridgelabz.bookstore.exceptions.UserNotFoundException;
 import com.bridgelabz.bookstore.models.UserEntity;
 import com.bridgelabz.bookstore.repositories.UserRepository;
@@ -11,7 +13,10 @@ import com.bridgelabz.bookstore.utility.Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -51,14 +56,17 @@ public class UserServiceImplementation implements IUserService {
     @Autowired
     private RabbitMQSender rabbitMQSender;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
 
     @Override
     public boolean register( UserDto newUserDto ) throws UserNotFoundException {
         if (!userRepository.existsByUserName (newUserDto.getUserName ())) {
             UserEntity newUser = new UserEntity ();
             BeanUtils.copyProperties (newUserDto, newUser);
-            System.out.println ("newUserDto = " + newUserDto);
-            System.out.println ("newUser = " + newUser);
+//            System.out.println ("newUserDto = " + newUserDto);
+//            System.out.println ("newUser = " + newUser);
             newUser.setCreatedDateTime (LocalDateTime.now ().format (DateTimeFormatter.ofPattern ("yyyy-MM-dd HH:mm:ss")));
             newUser.setVerified (false);
             newUser.setPassword (passwordEncoder.encode (newUser.getPassword ()));
@@ -84,9 +92,31 @@ public class UserServiceImplementation implements IUserService {
     }
 
     @Override
-    public  boolean isVerifiedUser( final String token ) {
-       userRepository.verifyTheUser(jwtTokenProvider.getUserName (token));
+    public boolean isVerifiedUser( final String token ) {
+        userRepository.verifyTheUser (jwtTokenProvider.getUserName (token));
         return true;
+    }
+
+    @Override
+    public UserLoginInfo login( LoginDto loginDto ) throws UserAuthenticationException {
+        try {
+//            authenticate the user and get the authenticated username and data
+            Authentication authenticationUserInfo = authenticationManager.authenticate (
+                    new UsernamePasswordAuthenticationToken (loginDto.getUserName (), loginDto.getPassword ()));
+            Optional<UserEntity> fetchedUser = userRepository.findOneByUserName (authenticationUserInfo.getName ());
+//            System.out.println ("name : " + authenticationUserInfo.getName ());
+//            System.out.println ("fetched user : " + fetchedUser);
+//            user valid and verified
+            if (fetchedUser.get ().isVerified ()) {
+                String createdToken = jwtTokenProvider.createToken (authenticationUserInfo.getName (), fetchedUser.get ().getRoles ());
+                return new UserLoginInfo (createdToken, fetchedUser.get ().getFirstName ());
+            }
+//            user is valid but not verified.
+            rabbitMQSender.send (mailContent (fetchedUser.get ()));
+            return new UserLoginInfo ("", fetchedUser.get ().getFirstName ());
+        } catch (AuthenticationException e) {
+            throw new UserAuthenticationException ("Oops...Invalid username/password supplied!", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
 }

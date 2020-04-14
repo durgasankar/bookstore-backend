@@ -39,6 +39,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 //        allowed all request with full permission
         http.authorizeRequests ()
                 .antMatchers ("/users/registration").permitAll ()
+                .antMatchers ("/users/login").permitAll ()
                 .antMatchers ("/users/**/**").permitAll ()
                 .antMatchers ("/h2-console/**/**").permitAll ()
                 .anyRequest ()
