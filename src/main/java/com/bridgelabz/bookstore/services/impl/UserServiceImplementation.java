@@ -1,4 +1,4 @@
-package com.bridgelabz.bookstore.services;
+package com.bridgelabz.bookstore.services.impl;
 
 import com.bridgelabz.bookstore.dto.LoginDto;
 import com.bridgelabz.bookstore.dto.UserDto;
@@ -8,6 +8,7 @@ import com.bridgelabz.bookstore.models.UserEntity;
 import com.bridgelabz.bookstore.repositories.UserRepository;
 import com.bridgelabz.bookstore.responses.MailObject;
 import com.bridgelabz.bookstore.security.JwtTokenProvider;
+import com.bridgelabz.bookstore.services.IUserService;
 import com.bridgelabz.bookstore.utility.RabbitMQSender;
 import com.bridgelabz.bookstore.utility.Util;
 import org.springframework.beans.BeanUtils;
@@ -30,12 +31,8 @@ import java.util.Optional;
  * identity and all implementations as carried here.
  *
  * @author Durgasankar Mishra
- * @version 1.1
- * @created 2020-01-22
- * @modified -> 2020-02-09
- * @updated -> RabbitMQ functionality added to the existing JMS mail service.
- * @updated -> 2020-04-02
- * @modified -> added extra field address on registration form.
+ * @version 1.0
+ * @created 2020-04-13
  * @see {@link PasswordEncoder} for creating encrypted password
  * @see {@link UserRepository} for storing data with the database
  * @see {@link JwtTokenProvider} fore creation of token

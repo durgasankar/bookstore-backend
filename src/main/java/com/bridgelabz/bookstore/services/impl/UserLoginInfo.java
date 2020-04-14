@@ -1,4 +1,4 @@
-package com.bridgelabz.bookstore.services;
+package com.bridgelabz.bookstore.services.impl;
 
 public class UserLoginInfo {
     private String token;

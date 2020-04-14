@@ -2,18 +2,14 @@ package com.bridgelabz.bookstore.controllers;
 
 import com.bridgelabz.bookstore.dto.LoginDto;
 import com.bridgelabz.bookstore.dto.UserDto;
-import com.bridgelabz.bookstore.models.UserEntity;
 import com.bridgelabz.bookstore.responses.LoginResponse;
 import com.bridgelabz.bookstore.responses.Response;
 import com.bridgelabz.bookstore.services.IUserService;
-import com.bridgelabz.bookstore.services.UserLoginInfo;
+import com.bridgelabz.bookstore.services.impl.UserLoginInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 /**
  * By using the object reference of service class This class has the

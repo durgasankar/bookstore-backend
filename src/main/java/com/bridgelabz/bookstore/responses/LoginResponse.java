@@ -1,6 +1,6 @@
 package com.bridgelabz.bookstore.responses;
 
-import com.bridgelabz.bookstore.services.UserLoginInfo;
+import com.bridgelabz.bookstore.services.impl.UserLoginInfo;
 
 public class LoginResponse extends Response {
 

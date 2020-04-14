@@ -3,6 +3,7 @@ package com.bridgelabz.bookstore.services;
 import com.bridgelabz.bookstore.dto.LoginDto;
 import com.bridgelabz.bookstore.dto.UserDto;
 import com.bridgelabz.bookstore.exceptions.UserNotFoundException;
+import com.bridgelabz.bookstore.services.impl.UserLoginInfo;
 
 /**
  * This interface has the UnImplemented functionality of registering the user

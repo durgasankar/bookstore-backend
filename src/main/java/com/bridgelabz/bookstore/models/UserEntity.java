@@ -1,5 +1,7 @@
 package com.bridgelabz.bookstore.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
@@ -42,10 +44,16 @@ public class UserEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     private List<Role> roles;
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "users_books",
+            joinColumns = {@JoinColumn(name = "book_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id")})
+    private List<BookEntity> booksList;
 
     public UserEntity() {
         this.addresses = new ArrayList<> ();
         this.roles = new LinkedList<> ();
+        this.booksList = new ArrayList<>();
     }
 
     public long getUserId() {
@@ -136,6 +144,10 @@ public class UserEntity {
         this.roles = roles;
     }
 
+    public List<BookEntity> getBooksList() { return booksList; }
+
+    public void setBooksList( List<BookEntity> booksList ) { this.booksList = booksList; }
+
     @Override
     public String toString() {
         return "UserEntity{" +
@@ -150,6 +162,7 @@ public class UserEntity {
                 ", isVerified=" + isVerified +
                 ", addresses=" + addresses +
                 ", roles=" + roles +
+                ", booksList=" + booksList +
                 '}';
     }
 }
