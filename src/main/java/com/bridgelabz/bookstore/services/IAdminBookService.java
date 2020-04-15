@@ -9,7 +9,9 @@ import java.util.List;
 @Service
 public interface IAdminBookService {
 
-    boolean isBookAddedToStore( BookDto bookDto, String token );
+    boolean isBookAddedToStoreByAdmin( BookDto bookDto, String token );
 
     List<BookEntity> getAllBooksFromStore( String token );
+
+    boolean isRemovedFromStoreByAdmin( long bookId, String token );
 }

@@ -22,6 +22,9 @@ public class BookEntity {
     private String additionDateTime;
     @Column(length = 30)
     private String checkOutDateTime;
+    @Column(length = 30)
+    private String updateDateTime;
+    private boolean isRemoved;
     private boolean isAddedToCart;
     private boolean isCheckedOut;
     private boolean isOutOfStock;
@@ -79,6 +82,14 @@ public class BookEntity {
 
     public void setPrice( double price ) { this.price = price; }
 
+    public boolean isRemoved() { return isRemoved; }
+
+    public void setRemoved( boolean removed ) { isRemoved = removed; }
+
+    public String getUpdateDateTime() { return updateDateTime; }
+
+    public void setUpdateDateTime( String updateDateTime ) { this.updateDateTime = updateDateTime; }
+
     @Override
     public String toString() {
         return "BookEntity{" +
@@ -90,6 +101,8 @@ public class BookEntity {
                 ", price=" + price +
                 ", additionDateTime='" + additionDateTime + '\'' +
                 ", checkOutDateTime='" + checkOutDateTime + '\'' +
+                ", updateDateTime='" + updateDateTime + '\'' +
+                ", isRemoved=" + isRemoved +
                 ", isAddedToCart=" + isAddedToCart +
                 ", isCheckedOut=" + isCheckedOut +
                 ", isOutOfStock=" + isOutOfStock +

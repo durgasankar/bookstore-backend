@@ -3,16 +3,14 @@ package com.bridgelabz.bookstore.exceptions;
 import org.springframework.http.HttpStatus;
 
 /**
- * This class extends {@link RuntimeException} and creates a custom exception
+ * This class extends {@link BookStoreException} and creates a custom exception
  * which would be thrown if user is present in the database.
  *
  * @author Durgasankar Mishra
  * @version 1.0
  * @created 2020-04-13
  */
-public class UserNotFoundException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
-    private final HttpStatus httpStatus;
+public class UserNotFoundException extends BookStoreException {
 
     /**
      * Constructor takes message and Status code as input parameter and fetch
@@ -22,9 +20,6 @@ public class UserNotFoundException extends RuntimeException {
      * @param httpStatus as Integer input parameter
      */
     public UserNotFoundException( String message, HttpStatus httpStatus ) {
-        super (message);
-        this.httpStatus = httpStatus;
+        super (message, httpStatus);
     }
-
-    public HttpStatus getHttpStatus() { return httpStatus; }
 }

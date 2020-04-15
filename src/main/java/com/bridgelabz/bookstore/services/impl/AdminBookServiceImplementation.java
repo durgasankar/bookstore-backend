@@ -1,6 +1,9 @@
 package com.bridgelabz.bookstore.services.impl;
 
 import com.bridgelabz.bookstore.dto.BookDto;
+import com.bridgelabz.bookstore.exceptions.BookNotFoundException;
+import com.bridgelabz.bookstore.exceptions.BookStoreException;
+import com.bridgelabz.bookstore.exceptions.UserAuthenticationException;
 import com.bridgelabz.bookstore.exceptions.UserNotFoundException;
 import com.bridgelabz.bookstore.models.BookEntity;
 import com.bridgelabz.bookstore.models.Roles;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * This class implements {@link IAdminBookService} interface which has the
@@ -47,7 +51,7 @@ public class AdminBookServiceImplementation implements IAdminBookService {
 
 
     @Override
-    public boolean isBookAddedToStore( BookDto bookDto, String token ) {
+    public boolean isBookAddedToStoreByAdmin( BookDto bookDto, String token ) {
         if (isAdminUser (token)) {
             BookEntity newBook = new BookEntity ();
             BeanUtils.copyProperties (bookDto, newBook);
@@ -67,10 +71,7 @@ public class AdminBookServiceImplementation implements IAdminBookService {
     private boolean isAdminUser( final String token ) {
         Optional<UserEntity> fetchedUser = getAuthenticateUser (token);
         if (fetchedUser.isPresent ()) {
-            if (fetchedUser.get ().getRoles ().contains (Roles.ROLE_ADMIN)) {
-                return true;
-            }
-            return false;
+            return fetchedUser.get ().getRoles ().contains (Roles.ROLE_ADMIN);
         }
         throw new UserNotFoundException (Util.USER_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND);
     }
@@ -87,6 +88,40 @@ public class AdminBookServiceImplementation implements IAdminBookService {
 
     @Override
     public List<BookEntity> getAllBooksFromStore( String token ) {
-            return bookRepository.findAll ();
+        return bookRepository.findAll ()
+                .stream ()
+                .filter (fetchedBook -> !fetchedBook.isRemoved ())
+                .collect (Collectors.toList ());
     }
+
+    @Override
+    public boolean isRemovedFromStoreByAdmin( long bookId, String token ) throws BookStoreException {
+        if (isAdminUser (token)) {
+            Optional<BookEntity> fetchedBook = validBook (bookId);
+            if (!fetchedBook.get ().isRemoved ()) {
+                fetchedBook.get ().setRemoved (true);
+                fetchedBook.get ().setUpdateDateTime (Util.currentDateTime ());
+                bookRepository.save (fetchedBook.get ());
+                return true;
+            }
+            return false;
+        }
+        throw new UserAuthenticationException ("Oops...User is not admin!", HttpStatus.UNAUTHORIZED);
+    }
+
+    /**
+     * takes book id as input parameter and returns valid book
+     *
+     * @param bookId as Long
+     * @return Optional<BookEntity>
+     * @throws BookNotFoundException If book not found
+     */
+    private Optional<BookEntity> validBook( final long bookId ) throws BookNotFoundException{
+        Optional<BookEntity> fetchedBook = bookRepository.findById (bookId);
+        if (fetchedBook.isPresent ())
+            return fetchedBook;
+        throw new BookNotFoundException (Util.BOOK_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND);
+    }
+
+
 }

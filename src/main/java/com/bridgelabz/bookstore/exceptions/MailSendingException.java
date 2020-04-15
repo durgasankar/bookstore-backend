@@ -3,7 +3,7 @@ package com.bridgelabz.bookstore.exceptions;
 import org.springframework.http.HttpStatus;
 
 /**
- * This class extends {@link RuntimeException} and creates a custom exception
+ * This class extends {@link BookStoreException} and creates a custom exception
  * which would be thrown during the user's abnormal activity while performing
  * mail sending operations.
  *
@@ -11,9 +11,7 @@ import org.springframework.http.HttpStatus;
  * @version 1.0
  * @created 2020-04-12
  */
-public class MailSendingException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
-    private final HttpStatus httpStatus;
+public class MailSendingException extends BookStoreException {
 
     /**
      * Constructor takes message and Status code as input parameter and fetch
@@ -23,9 +21,6 @@ public class MailSendingException extends RuntimeException {
      * @param httpStatus as Integer input parameter
      */
     public MailSendingException( String message, HttpStatus httpStatus ) {
-        super (message);
-        this.httpStatus = httpStatus;
+        super (message, httpStatus);
     }
-
-    public HttpStatus getHttpStatus() { return httpStatus; }
 }
