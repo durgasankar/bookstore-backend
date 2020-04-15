@@ -17,7 +17,7 @@ import java.util.List;
  * @created 2020-04-13
  */
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity {
 
     @Id
@@ -39,11 +39,11 @@ public class UserEntity {
     private String createdDateTime;
     private boolean isVerified;
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "user_addresses", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "users_addresses", joinColumns = @JoinColumn(name = "user_id"))
     private List<Address> addresses;
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    private List<Role> roles;
+    @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
+    private List<Roles> roles;
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "users_books",
@@ -136,11 +136,11 @@ public class UserEntity {
         this.addresses = addresses;
     }
 
-    public List<Role> getRoles() {
+    public List<Roles> getRoles() {
         return roles;
     }
 
-    public void setRoles( List<Role> roles ) {
+    public void setRoles( List<Roles> roles ) {
         this.roles = roles;
     }
 

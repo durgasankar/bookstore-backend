@@ -1,6 +1,6 @@
 package com.bridgelabz.bookstore.dto;
 
-import com.bridgelabz.bookstore.models.Role;
+import com.bridgelabz.bookstore.models.Roles;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -25,7 +25,7 @@ public class UserDto {
     @NotNull(message = "field should not be empty")
     private long mobileNumber;
     private String userName;
-    private List<Role> roles;
+    private List<Roles> roles;
 
     public String getFirstName() {
         return firstName;
@@ -75,11 +75,11 @@ public class UserDto {
         this.userName = userName;
     }
 
-    public List<Role> getRoles() {
+    public List<Roles> getRoles() {
         return roles;
     }
 
-    public void setRoles( List<Role> roles ) {
+    public void setRoles( List<Roles> roles ) {
         this.roles = roles;
     }
 

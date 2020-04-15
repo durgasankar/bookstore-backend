@@ -1,5 +1,8 @@
 package com.bridgelabz.bookstore.utility;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * This singleton class has the all the reusable methods => createLink
  *
@@ -33,5 +36,11 @@ public class Util {
     public static String createLink( String url, String token ) {
         return url + "/" + token;
     }
+
+    public static String currentDateTime() {
+        return LocalDateTime.now ().format (DateTimeFormatter.ofPattern ("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    ;
 
 }
