@@ -38,8 +38,8 @@ public class UserEntity {
     @Column(length = 30)
     private String createdDateTime;
     private boolean isVerified;
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "users_addresses", joinColumns = @JoinColumn(name = "user_id"))
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private List<Address> addresses;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))

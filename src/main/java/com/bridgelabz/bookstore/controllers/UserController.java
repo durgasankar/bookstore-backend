@@ -64,7 +64,8 @@ public class UserController {
     }
 
     @PostMapping("/address/add")
-    public ResponseEntity<Response> addAddressOfUser( @RequestBody final AddressDto addressDto, @RequestHeader("token") final String token ) {
+    public ResponseEntity<Response> addAddressOfUser
+            ( @RequestBody final AddressDto addressDto, @RequestHeader("token") final String token ) {
         boolean isAddressAdded = userService.isUserAddressAdded (addressDto, token);
         if (isAddressAdded)
             return ResponseEntity.ok ()
@@ -73,6 +74,22 @@ public class UserController {
                 .body (new Response ("Oops...Error registering address!", 400));
     }
 
+    @DeleteMapping("/address/{id}")
+    public ResponseEntity<Response> removeAddressOfUser
+            ( @PathVariable("id") final String addressId, @RequestHeader("token") final String token ) {
+        boolean isAddressRemoved = userService.isUserAddressRemoved (addressId, token);
+        if (isAddressRemoved)
+            return ResponseEntity.ok ()
+                    .body (new Response ("Address removed successfully!", 200));
+        return ResponseEntity.status (HttpStatus.BAD_REQUEST)
+                .body (new Response ("Oops...Error removing address!", 400));
+    }
+
+    @GetMapping("/address/get")
+    public ResponseEntity<Response> getAllBooks( @RequestHeader("token") final String token ) {
+        return ResponseEntity.ok ()
+                .body (new Response ("Addresses are : ", HttpStatus.OK, userService.getAllAddressOfUser (token)));
+    }
 
 
 }

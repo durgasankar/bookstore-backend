@@ -10,6 +10,7 @@ import com.bridgelabz.bookstore.exceptions.UserNotFoundException;
 import com.bridgelabz.bookstore.models.Address;
 import com.bridgelabz.bookstore.models.Roles;
 import com.bridgelabz.bookstore.models.UserEntity;
+import com.bridgelabz.bookstore.repositories.AddressRepository;
 import com.bridgelabz.bookstore.repositories.UserRepository;
 import com.bridgelabz.bookstore.responses.MailObject;
 import com.bridgelabz.bookstore.security.JwtTokenProvider;
@@ -52,6 +53,9 @@ public class UserServiceImplementation implements IUserService {
 
     @Autowired
     private RabbitMQSender rabbitMQSender;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
 //    @Autowired
 //    private AuthenticationManager authenticationManager;
@@ -143,10 +147,8 @@ public class UserServiceImplementation implements IUserService {
         Optional<UserEntity> fetchedUser = getAuthenticateUserWithRoleUser (token);
         Address newAddress = new Address ();
         BeanUtils.copyProperties (addressDto, newAddress);
-        List<Address> fetchedAddresses = fetchedUser.get ().getAddresses ();
-        fetchedAddresses.add (newAddress);
-        fetchedUser.get ().setAddresses (fetchedAddresses);
-        userRepository.saveAndFlush (fetchedUser.get ());
+        fetchedUser.get ().getAddresses ().add(newAddress);
+        addressRepository.saveAndFlush (newAddress);
         return true;
     }
 
@@ -159,7 +161,6 @@ public class UserServiceImplementation implements IUserService {
     private Optional<UserEntity> getAuthenticateUserWithRoleUser( final String token )
             throws UserAuthenticationException, UserNotFoundException {
         Optional<UserEntity> fetchedUser = userRepository.findOneByUserName (jwtTokenProvider.getUserName (token));
-        System.out.println ("fetchedUser = " + fetchedUser.get ());
         if (fetchedUser.isPresent ()) {
             if (fetchedUser.get ().getRoles ().contains (Roles.ROLE_USER)) {
                 return fetchedUser;
@@ -169,5 +170,16 @@ public class UserServiceImplementation implements IUserService {
         throw new UserNotFoundException (Util.USER_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND);
     }
 
+    @Override
+    public boolean isUserAddressRemoved( String addressId, String token ) throws BookStoreException {
+        Optional<UserEntity> fetchedUser = getAuthenticateUserWithRoleUser (token);
+        addressRepository.removeAddress(addressId, fetchedUser.get ().getUserId ());
+        return true;
+    }
+
+    @Override
+    public List<Address> getAllAddressOfUser( String token ) {
+        return getAuthenticateUserWithRoleUser (token).get ().getAddresses ();
+    }
 
 }

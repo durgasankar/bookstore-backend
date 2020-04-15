@@ -1,23 +1,32 @@
 package com.bridgelabz.bookstore.models;
 
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 
 /**
- * Embedded model address which contains several fields and follows
- * Builder design pattern.
+ * one to many mapped address which contains several fields and follows
  *
  * @author Durgasankar Mishra
  * @version 1.0
- * @created 2020-04-12
+ * @created 2020-04-15
  * @see {@link UserEntity}
  */
-@Embeddable
+@Entity
+@Table(name = "users_addresses")
 public class Address {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "address_id")
+    private long addressId;
+    @Column(length = 25)
     private String street;
+    @Column(length = 25)
     private String town;
+    @Column(length = 25)
     private String district;
+    @Column(length = 25)
     private String state;
+    @Column(length = 25)
     private String country;
     private int pinCode;
 
@@ -47,10 +56,15 @@ public class Address {
 
     public void setPinCode( int pinCode ) { this.pinCode = pinCode; }
 
+    public long getAddressId() { return addressId; }
+
+    public void setAddressId( long addressId ) { this.addressId = addressId; }
+
     @Override
     public String toString() {
-        return "AddressDto{" +
-                "street='" + street + '\'' +
+        return "Address{" +
+                "addressId=" + addressId +
+                ", street='" + street + '\'' +
                 ", town='" + town + '\'' +
                 ", district='" + district + '\'' +
                 ", state='" + state + '\'' +

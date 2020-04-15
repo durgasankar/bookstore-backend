@@ -1,6 +1,5 @@
 package com.bridgelabz.bookstore.repositories;
 
-import com.bridgelabz.bookstore.models.Address;
 import com.bridgelabz.bookstore.models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -29,5 +28,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Transactional
     @Query(value = " update users set is_verified = true where user_name =  ? ", nativeQuery = true)
     void verifyTheUser( final String userName );
-    
+
 }

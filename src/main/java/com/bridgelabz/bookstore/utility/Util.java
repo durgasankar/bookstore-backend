@@ -2,6 +2,7 @@ package com.bridgelabz.bookstore.utility;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 /**
  * This singleton class has the all the reusable methods => createLink
@@ -15,6 +16,8 @@ public class Util {
     private Util() {
 
     }
+
+    private static Random random = new Random();
 
     public static final String IP_ADDRESS = "http://localhost:";
     public static final String SENDER_EMAIL_ID = "jc100.r20jc134@gmail.com";
@@ -42,6 +45,15 @@ public class Util {
         return LocalDateTime.now ().format (DateTimeFormatter.ofPattern ("yyyy-MM-dd HH:mm:ss"));
     }
 
-    ;
+    /**
+     * This function generate random id.
+     *
+     * @return String data
+     */
+    public static String idGenerator() {
+        String inputId = "#Du";
+        inputId += random.nextInt (10000);
+        return inputId;
+    }
 
 }
