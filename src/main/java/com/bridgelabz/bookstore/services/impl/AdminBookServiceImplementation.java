@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -82,5 +83,10 @@ public class AdminBookServiceImplementation implements IAdminBookService {
      */
     private Optional<UserEntity> getAuthenticateUser( final String token ) {
         return userRepository.findOneByUserName (jwtTokenProvider.getUserName (token));
+    }
+
+    @Override
+    public List<BookEntity> getAllBooksFromStore( String token ) {
+            return bookRepository.findAll ();
     }
 }

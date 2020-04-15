@@ -1,12 +1,15 @@
 package com.bridgelabz.bookstore.controllers;
 
 import com.bridgelabz.bookstore.dto.BookDto;
+import com.bridgelabz.bookstore.models.BookEntity;
 import com.bridgelabz.bookstore.responses.Response;
 import com.bridgelabz.bookstore.services.IAdminBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -23,5 +26,12 @@ public class AdminBookOperationsController {
                     .body (new Response ("Oops...Error adding book to the store!", 400));
         return ResponseEntity.status (HttpStatus.CREATED)
                 .body (new Response ("Book added successfully!", 201));
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<Response> registration( @RequestHeader("token") final String token ) {
+            return ResponseEntity.status (HttpStatus.OK)
+                    .body (new Response ("Books are : ", HttpStatus.OK, adminBookService.getAllBooksFromStore (token)));
+
     }
 }
