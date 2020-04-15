@@ -17,7 +17,7 @@ public class AdminBookOperationsController {
 
     @PostMapping("/add")
     public ResponseEntity<Response> registration( @RequestBody final BookDto bookDto, @RequestHeader("token") final String token ) {
-        boolean isAdded = adminBookService.isBookAddedToStore (bookDto);
+        boolean isAdded = adminBookService.isBookAddedToStore (bookDto, token);
         if (!isAdded)
             return ResponseEntity.status (HttpStatus.BAD_REQUEST)
                     .body (new Response ("Oops...Error adding book to the store!", 400));

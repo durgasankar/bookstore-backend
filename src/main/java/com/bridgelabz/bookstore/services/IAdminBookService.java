@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface IAdminBookService {
 
-    boolean isBookAddedToStore( BookDto bookDto );
+    boolean isBookAddedToStore( BookDto bookDto, String token );
 
 }

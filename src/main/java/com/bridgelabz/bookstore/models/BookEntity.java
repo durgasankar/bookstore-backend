@@ -17,6 +17,7 @@ public class BookEntity {
     private String Author;
     private String imageUrl;
     private int quantity;
+    private double price;
     @Column(length = 30)
     private String additionDateTime;
     @Column(length = 30)
@@ -74,6 +75,10 @@ public class BookEntity {
 
     public void setUsersList( List<UserEntity> usersList ) { this.usersList = usersList; }
 
+    public double getPrice() { return price; }
+
+    public void setPrice( double price ) { this.price = price; }
+
     @Override
     public String toString() {
         return "BookEntity{" +
@@ -82,6 +87,7 @@ public class BookEntity {
                 ", Author='" + Author + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", quantity=" + quantity +
+                ", price=" + price +
                 ", additionDateTime='" + additionDateTime + '\'' +
                 ", checkOutDateTime='" + checkOutDateTime + '\'' +
                 ", isAddedToCart=" + isAddedToCart +
