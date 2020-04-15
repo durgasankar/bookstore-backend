@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstore.controllers;
 
+import com.bridgelabz.bookstore.dto.AddressDto;
 import com.bridgelabz.bookstore.dto.LoginDto;
 import com.bridgelabz.bookstore.dto.UserDto;
 import com.bridgelabz.bookstore.responses.LoginResponse;
@@ -61,6 +62,17 @@ public class UserController {
         return ResponseEntity.status (HttpStatus.NON_AUTHORITATIVE_INFORMATION)
                 .body (new LoginResponse ("Oops...user not verified. Check your mail for verification!", 203, userLoginInfo));
     }
+
+    @PostMapping("/address/add")
+    public ResponseEntity<Response> addAddressOfUser( @RequestBody final AddressDto addressDto, @RequestHeader("token") final String token ) {
+        boolean isAddressAdded = userService.isUserAddressAdded (addressDto, token);
+        if (isAddressAdded)
+            return ResponseEntity.ok ()
+                    .body (new Response ("Address added successfully!", 200));
+        return ResponseEntity.status (HttpStatus.BAD_REQUEST)
+                .body (new Response ("Oops...Error registering address!", 400));
+    }
+
 
 
 }

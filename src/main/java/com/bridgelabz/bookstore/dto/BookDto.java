@@ -1,5 +1,12 @@
 package com.bridgelabz.bookstore.dto;
 
+/**
+ * Model class for book dto
+ *
+ * @author Durgasankar Mishra
+ * @version 1.0
+ * @created 2020-04-14
+ */
 public class BookDto {
 
     private String title;

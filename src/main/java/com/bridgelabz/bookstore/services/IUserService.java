@@ -1,7 +1,9 @@
 package com.bridgelabz.bookstore.services;
 
+import com.bridgelabz.bookstore.dto.AddressDto;
 import com.bridgelabz.bookstore.dto.LoginDto;
 import com.bridgelabz.bookstore.dto.UserDto;
+import com.bridgelabz.bookstore.exceptions.BookStoreException;
 import com.bridgelabz.bookstore.exceptions.InvalidCredentialsException;
 import com.bridgelabz.bookstore.exceptions.UserNotFoundException;
 import com.bridgelabz.bookstore.services.impl.UserLoginInfo;
@@ -22,4 +24,6 @@ public interface IUserService {
     boolean isVerifiedUser( String token );
 
     UserLoginInfo login( LoginDto loginDto ) throws UserNotFoundException, InvalidCredentialsException;
+
+    boolean isUserAddressAdded( AddressDto addressDto, String token ) throws BookStoreException;
 }

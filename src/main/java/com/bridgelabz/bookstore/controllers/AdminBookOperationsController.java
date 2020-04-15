@@ -32,7 +32,7 @@ public class AdminBookOperationsController {
 
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/remove/{id}")
     public ResponseEntity<Response> removeBookByAdmin( @RequestHeader("token") final String token, @PathVariable("id") final long bookId ) {
         boolean isRemoved = adminBookService.isRemovedFromStoreByAdmin (bookId, token);
         if (!isRemoved)

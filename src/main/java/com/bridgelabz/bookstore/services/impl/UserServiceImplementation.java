@@ -1,9 +1,14 @@
 package com.bridgelabz.bookstore.services.impl;
 
+import com.bridgelabz.bookstore.dto.AddressDto;
 import com.bridgelabz.bookstore.dto.LoginDto;
 import com.bridgelabz.bookstore.dto.UserDto;
+import com.bridgelabz.bookstore.exceptions.BookStoreException;
 import com.bridgelabz.bookstore.exceptions.InvalidCredentialsException;
+import com.bridgelabz.bookstore.exceptions.UserAuthenticationException;
 import com.bridgelabz.bookstore.exceptions.UserNotFoundException;
+import com.bridgelabz.bookstore.models.Address;
+import com.bridgelabz.bookstore.models.Roles;
 import com.bridgelabz.bookstore.models.UserEntity;
 import com.bridgelabz.bookstore.repositories.UserRepository;
 import com.bridgelabz.bookstore.responses.MailObject;
@@ -16,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -130,5 +137,37 @@ public class UserServiceImplementation implements IUserService {
 //        not found
         throw new UserNotFoundException (Util.USER_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND);
     }
+
+    @Override
+    public boolean isUserAddressAdded( AddressDto addressDto, String token ) throws BookStoreException {
+        Optional<UserEntity> fetchedUser = getAuthenticateUserWithRoleUser (token);
+        Address newAddress = new Address ();
+        BeanUtils.copyProperties (addressDto, newAddress);
+        List<Address> fetchedAddresses = fetchedUser.get ().getAddresses ();
+        fetchedAddresses.add (newAddress);
+        fetchedUser.get ().setAddresses (fetchedAddresses);
+        userRepository.saveAndFlush (fetchedUser.get ());
+        return true;
+    }
+
+    /**
+     * get the user from the token provided from user repository and
+     *
+     * @param token as String input parameter
+     * @return Optional<UserEntity>
+     */
+    private Optional<UserEntity> getAuthenticateUserWithRoleUser( final String token )
+            throws UserAuthenticationException, UserNotFoundException {
+        Optional<UserEntity> fetchedUser = userRepository.findOneByUserName (jwtTokenProvider.getUserName (token));
+        System.out.println ("fetchedUser = " + fetchedUser.get ());
+        if (fetchedUser.isPresent ()) {
+            if (fetchedUser.get ().getRoles ().contains (Roles.ROLE_USER)) {
+                return fetchedUser;
+            }
+            throw new UserAuthenticationException ("Oops...User is not authorized for Operation!", HttpStatus.UNAUTHORIZED);
+        }
+        throw new UserNotFoundException (Util.USER_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND);
+    }
+
 
 }

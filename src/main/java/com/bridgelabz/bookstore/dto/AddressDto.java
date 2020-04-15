@@ -1,18 +1,13 @@
-package com.bridgelabz.bookstore.models;
-
-import javax.persistence.Embeddable;
+package com.bridgelabz.bookstore.dto;
 
 /**
- * Embedded model address which contains several fields and follows
- * Builder design pattern.
+ * Model class for Address dto
  *
  * @author Durgasankar Mishra
  * @version 1.0
- * @created 2020-04-12
- * @see {@link UserEntity}
+ * @created 2020-04-15
  */
-@Embeddable
-public class Address {
+public class AddressDto {
 
     private String street;
     private String town;
@@ -21,7 +16,7 @@ public class Address {
     private String country;
     private int pinCode;
 
-    public Address() { }
+    public AddressDto() { }
 
     public String getStreet() { return street; }
 
