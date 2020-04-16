@@ -13,7 +13,7 @@ public class BookDto {
     private String author;
     private String imageUrl;
     private double price;
-    private int quantity;
+    private int availableQuantity;
 
     public BookDto() {
     }
@@ -34,9 +34,9 @@ public class BookDto {
 
     public void setPrice( double price ) { this.price = price; }
 
-    public int getQuantity() { return quantity; }
+    public int getAvailableQuantity() { return availableQuantity; }
 
-    public void setQuantity( int quantity ) { this.quantity = quantity; }
+    public void setAvailableQuantity( int availableQuantity ) { this.availableQuantity = availableQuantity; }
 
     @Override
     public String toString() {
@@ -45,7 +45,7 @@ public class BookDto {
                 ", author='" + author + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", price=" + price +
-                ", quantity=" + quantity +
+                ", availableQuantity=" + availableQuantity +
                 '}';
     }
 }

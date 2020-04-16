@@ -16,7 +16,9 @@ public class BookEntity {
     private String title;
     private String Author;
     private String imageUrl;
-    private int quantity;
+    private String orderNumber;
+    private int availableQuantity;
+    private int purchasedQuantity;
     private double price;
     @Column(length = 30)
     private String additionDateTime;
@@ -50,10 +52,6 @@ public class BookEntity {
     public String getImageUrl() { return imageUrl; }
 
     public void setImageUrl( String imageUrl ) { this.imageUrl = imageUrl; }
-
-    public int getQuantity() { return quantity; }
-
-    public void setQuantity( int quantity ) { this.quantity = quantity; }
 
     public String getAdditionDateTime() { return additionDateTime; }
 
@@ -95,6 +93,18 @@ public class BookEntity {
 
     public void setAddedToWatchlist( boolean addedToWatchlist ) { isAddedToWatchlist = addedToWatchlist; }
 
+    public int getAvailableQuantity() { return availableQuantity; }
+
+    public void setAvailableQuantity( int availableQuantity ) { this.availableQuantity = availableQuantity; }
+
+    public int getPurchasedQuantity() { return purchasedQuantity; }
+
+    public void setPurchasedQuantity( int purchasedQuantity ) { this.purchasedQuantity = purchasedQuantity; }
+
+    public String getOrderNumber() { return orderNumber; }
+
+    public void setOrderNumber( String orderNumber ) { this.orderNumber = orderNumber; }
+
     @Override
     public String toString() {
         return "BookEntity{" +
@@ -102,7 +112,9 @@ public class BookEntity {
                 ", title='" + title + '\'' +
                 ", Author='" + Author + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", quantity=" + quantity +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", availableQuantity=" + availableQuantity +
+                ", purchasedQuantity=" + purchasedQuantity +
                 ", price=" + price +
                 ", additionDateTime='" + additionDateTime + '\'' +
                 ", checkOutDateTime='" + checkOutDateTime + '\'' +

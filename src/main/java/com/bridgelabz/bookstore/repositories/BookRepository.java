@@ -13,6 +13,4 @@ import org.springframework.stereotype.Repository;
  * @see {@link JpaRepository } for Database Operations
  */
 @Repository
-public interface BookRepository extends JpaRepository<BookEntity, Long> {
-
-}
+public interface BookRepository extends JpaRepository<BookEntity, Long> { }

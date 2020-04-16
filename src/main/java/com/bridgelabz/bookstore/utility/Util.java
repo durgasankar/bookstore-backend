@@ -52,7 +52,7 @@ public class Util {
      */
     public static String idGenerator() {
         String inputId = "#Du";
-        inputId += random.nextInt (10000);
+        inputId += random.nextInt (10000000);
         return inputId;
     }
 

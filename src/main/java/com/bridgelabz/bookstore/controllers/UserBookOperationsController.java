@@ -27,25 +27,50 @@ public class UserBookOperationsController {
     private IUserBookServices userBookServices;
 
     @PutMapping("/cart/{id}")
-    public ResponseEntity<Response> addOrRemoveBookFromBag( @RequestHeader("token") final String token, @RequestParam("id") final long bookId ) {
+    public ResponseEntity<Response> addOrRemoveBookFromBag( @RequestHeader("token") final String token,
+                                                            @RequestParam("id") final long bookId ) {
         boolean isAddedToBag = userBookServices.isUserBookAddedToBag (token, bookId);
-        if (!isAddedToBag) {
+        if (!isAddedToBag)
             return ResponseEntity.status (HttpStatus.ACCEPTED)
                     .body (new Response ("Book removed from cart successfully!", 202));
-        }
         return ResponseEntity.ok ()
                 .body (new Response ("Book added to cart successfully!", 200));
     }
 
     @PutMapping("/watchlist/{id}")
-    public ResponseEntity<Response> addOrRemoveBookFromWatchList( @RequestHeader("token") final String token, @RequestParam("id") final long bookId ) {
+    public ResponseEntity<Response> addOrRemoveBookFromWatchList( @RequestHeader("token") final String token,
+                                                                  @RequestParam("id") final long bookId ) {
         boolean isAddedToWatchList = userBookServices.isUserBookAddedToWatchlist (token, bookId);
-        if (!isAddedToWatchList) {
+        if (!isAddedToWatchList)
             return ResponseEntity.status (HttpStatus.ACCEPTED)
                     .body (new Response ("Book removed from watchlist successfully!", 202));
-        }
         return ResponseEntity.ok ()
                 .body (new Response ("Book added to watchlist successfully!", 200));
+    }
+
+    @GetMapping("/cart")
+    public ResponseEntity<Response> getAllCartBooks( @RequestHeader("token") final String token ) {
+        return ResponseEntity.ok
+                (new Response ("Cart books : ", HttpStatus.OK, userBookServices.getCartList (token)));
+    }
+
+    @GetMapping("/watchlist")
+    public ResponseEntity<Response> getAllWatchlistBooks( @RequestHeader("token") final String token ) {
+        return ResponseEntity.ok
+                (new Response ("Watchlist books : ", HttpStatus.OK, userBookServices.getWatchlistBooks (token)));
+    }
+
+    @PutMapping("/checkout")
+    public ResponseEntity<Response> setQuantityAndCheckout( @RequestHeader("token") final String token,
+                                                            @RequestParam("quantity") final int quantity,
+                                                            @RequestParam("id") final long bookId ) {
+        String orderNumber = userBookServices.setPurchasingQuantity (token, quantity, bookId);
+        if (!orderNumber.isEmpty ()) {
+            return ResponseEntity
+                    .ok (new Response ("Order processed Successfully!", HttpStatus.OK, orderNumber));
+        }
+        return ResponseEntity.badRequest ()
+                .body (new Response ("Oops... Error processing order!", HttpStatus.BAD_REQUEST));
     }
 
 }
