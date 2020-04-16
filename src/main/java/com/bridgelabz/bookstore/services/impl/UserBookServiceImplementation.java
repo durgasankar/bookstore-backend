@@ -47,10 +47,20 @@ public class UserBookServiceImplementation implements IUserBookServices {
     public boolean isUserBookAddedToBag( String token, long bookId ) {
         Optional<BookEntity> fetchedValidBook = adminBookService.validBook (bookId);
         Optional<UserEntity> fetchedAuthenticatedUser = userService.getAuthenticateUserWithRoleUser (token);
-        fetchedValidBook.get ().setAddedToCart (true);
+//        not added just add it
+        if (!fetchedValidBook.get ().isAddedToCart ()) {
+            fetchedValidBook.get ().setAddedToCart (true);
+            fetchedValidBook.get ().setUpdateDateTime (Util.currentDateTime ());
+            fetchedAuthenticatedUser.get ().getBooksList ().add (fetchedValidBook.get ());
+            bookRepository.saveAndFlush (fetchedValidBook.get ());
+            return true;
+        }
+//        if book is added then remove from bag
+        fetchedValidBook.get ().setAddedToCart (false);
         fetchedValidBook.get ().setUpdateDateTime (Util.currentDateTime ());
-        fetchedAuthenticatedUser.get ().getBooksList ().add (fetchedValidBook.get ());
+        fetchedAuthenticatedUser.get ().getBooksList ().remove (fetchedValidBook.get ());
         bookRepository.saveAndFlush (fetchedValidBook.get ());
-        return true;
+        return false;
     }
+
 }
