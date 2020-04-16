@@ -1,7 +1,7 @@
 package com.bridgelabz.bookstore.services;
 
 import com.bridgelabz.bookstore.dto.BookDto;
-import com.bridgelabz.bookstore.models.BookEntity;
+import com.bridgelabz.bookstore.models.AdminBookEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public interface IAdminBookService {
 
     boolean isBookAddedToStoreByAdmin( BookDto bookDto, String token );
 
-    List<BookEntity> getAllBooksFromStore( String token );
+    List<AdminBookEntity> getAllBooksFromStore( String token );
 
     boolean isRemovedFromStoreByAdmin( long bookId, String token );
 }

@@ -5,10 +5,10 @@ import com.bridgelabz.bookstore.exceptions.BookNotFoundException;
 import com.bridgelabz.bookstore.exceptions.BookStoreException;
 import com.bridgelabz.bookstore.exceptions.UserAuthenticationException;
 import com.bridgelabz.bookstore.exceptions.UserNotFoundException;
-import com.bridgelabz.bookstore.models.BookEntity;
+import com.bridgelabz.bookstore.models.AdminBookEntity;
 import com.bridgelabz.bookstore.models.Roles;
 import com.bridgelabz.bookstore.models.UserEntity;
-import com.bridgelabz.bookstore.repositories.BookRepository;
+import com.bridgelabz.bookstore.repositories.AdminBookRepository;
 import com.bridgelabz.bookstore.repositories.UserRepository;
 import com.bridgelabz.bookstore.security.JwtTokenProvider;
 import com.bridgelabz.bookstore.services.IAdminBookService;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * @version 1.0
  * @created 2020-04-14
  * @see {@link UserRepository} for storing user data with the database
- * @see {@link BookRepository} for storing books data with the database
+ * @see {@link AdminBookRepository} for storing books data with admin access
  * @see {@link JwtTokenProvider} fore creation of token
  */
 @Service
@@ -41,7 +41,7 @@ public class AdminBookServiceImplementation implements IAdminBookService {
     private UserRepository userRepository;
 
     @Autowired
-    private BookRepository bookRepository;
+    private AdminBookRepository adminBookRepository;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -53,10 +53,11 @@ public class AdminBookServiceImplementation implements IAdminBookService {
     @Override
     public boolean isBookAddedToStoreByAdmin( BookDto bookDto, String token ) {
         if (isAdminUser (token)) {
-            BookEntity newBook = new BookEntity ();
+            AdminBookEntity newBook = new AdminBookEntity ();
             BeanUtils.copyProperties (bookDto, newBook);
+            newBook.setBookCode (Util.idGenerator ());
             newBook.setAdditionDateTime (Util.currentDateTime ());
-            bookRepository.save (newBook);
+            adminBookRepository.save (newBook);
             return true;
         }
         return false;
@@ -87,8 +88,8 @@ public class AdminBookServiceImplementation implements IAdminBookService {
     }
 
     @Override
-    public List<BookEntity> getAllBooksFromStore( String token ) {
-        return bookRepository.findAll ()
+    public List<AdminBookEntity> getAllBooksFromStore( String token ) {
+        return adminBookRepository.findAll ()
                 .stream ()
                 .filter (fetchedBook -> !fetchedBook.isRemoved ())
                 .collect (Collectors.toList ());
@@ -97,11 +98,11 @@ public class AdminBookServiceImplementation implements IAdminBookService {
     @Override
     public boolean isRemovedFromStoreByAdmin( long bookId, String token ) throws BookStoreException {
         if (isAdminUser (token)) {
-            Optional<BookEntity> fetchedBook = validBook (bookId);
+            Optional<AdminBookEntity> fetchedBook = validBook (bookId);
             if (!fetchedBook.get ().isRemoved ()) {
                 fetchedBook.get ().setRemoved (true);
                 fetchedBook.get ().setUpdateDateTime (Util.currentDateTime ());
-                bookRepository.save (fetchedBook.get ());
+                adminBookRepository.save (fetchedBook.get ());
                 return true;
             }
             return false;
@@ -113,11 +114,11 @@ public class AdminBookServiceImplementation implements IAdminBookService {
      * takes book id as input parameter and returns valid book
      *
      * @param bookId as Long
-     * @return Optional<BookEntity>
+     * @return Optional<UserBookEntity>
      * @throws BookNotFoundException If book not found
      */
-    Optional<BookEntity> validBook( final long bookId ) throws BookNotFoundException {
-        Optional<BookEntity> fetchedBook = bookRepository.findById (bookId);
+    Optional<AdminBookEntity> validBook( final long bookId ) throws BookNotFoundException {
+        Optional<AdminBookEntity> fetchedBook = adminBookRepository.findById (bookId);
         if (fetchedBook.isPresent ())
             return fetchedBook;
         throw new BookNotFoundException (Util.BOOK_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND);

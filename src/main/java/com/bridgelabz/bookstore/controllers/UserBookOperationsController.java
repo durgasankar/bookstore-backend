@@ -26,7 +26,7 @@ public class UserBookOperationsController {
     @Autowired
     private IUserBookServices userBookServices;
 
-    @PutMapping("/cart/{id}")
+    @PutMapping("/cart")
     public ResponseEntity<Response> addOrRemoveBookFromBag( @RequestHeader("token") final String token,
                                                             @RequestParam("id") final long bookId ) {
         boolean isAddedToBag = userBookServices.isUserBookAddedToBag (token, bookId);
@@ -37,7 +37,7 @@ public class UserBookOperationsController {
                 .body (new Response ("Book added to cart successfully!", 200));
     }
 
-    @PutMapping("/watchlist/{id}")
+    @PutMapping("/watchlist")
     public ResponseEntity<Response> addOrRemoveBookFromWatchList( @RequestHeader("token") final String token,
                                                                   @RequestParam("id") final long bookId ) {
         boolean isAddedToWatchList = userBookServices.isUserBookAddedToWatchlist (token, bookId);

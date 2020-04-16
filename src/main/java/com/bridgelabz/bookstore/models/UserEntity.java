@@ -46,9 +46,9 @@ public class UserEntity {
     private List<Roles> roles;
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "users_books",
+    @JoinTable(name = "users_books_mappings",
             joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "book_id")})
-    private List<BookEntity> booksList;
+    private List<UserBookEntity> booksList;
 
     public UserEntity() {
         this.addresses = new ArrayList<> ();
@@ -144,9 +144,9 @@ public class UserEntity {
         this.roles = roles;
     }
 
-    public List<BookEntity> getBooksList() { return booksList; }
+    public List<UserBookEntity> getBooksList() { return booksList; }
 
-    public void setBooksList( List<BookEntity> booksList ) { this.booksList = booksList; }
+    public void setBooksList( List<UserBookEntity> booksList ) { this.booksList = booksList; }
 
     @Override
     public String toString() {

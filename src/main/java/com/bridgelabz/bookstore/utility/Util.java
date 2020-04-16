@@ -3,6 +3,7 @@ package com.bridgelabz.bookstore.utility;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * This singleton class has the all the reusable methods => createLink
@@ -22,7 +23,7 @@ public class Util {
     public static final String IP_ADDRESS = "http://localhost:";
     public static final String SENDER_EMAIL_ID = "jc100.r20jc134@gmail.com";
     public static final String SENDER_PASSWORD = "r20jc134";
-    public static final String ANGULAR_PORT_NUMBER = "4200";
+//    public static final String ANGULAR_PORT_NUMBER = "4200";
     public static final String SPRING_PORT_NUMBER = "8081";
     public static final String REGISTRATION_VERIFICATION_LINK = "/verification";
     public static final String REGISTRATION_EMAIL_SUBJECT = "Registration Verification Link";
@@ -51,6 +52,15 @@ public class Util {
      * @return String data
      */
     public static String idGenerator() {
+        return UUID.randomUUID ().toString ();
+    }
+
+    /**
+     * This function generate order id
+     *
+     * @return String data
+     */
+    public static String generateOrderNumber(){
         String inputId = "#Du";
         inputId += random.nextInt (10000000);
         return inputId;
