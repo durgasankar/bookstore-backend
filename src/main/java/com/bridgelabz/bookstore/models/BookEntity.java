@@ -25,6 +25,7 @@ public class BookEntity {
     @Column(length = 30)
     private String updateDateTime;
     private boolean isRemoved;
+    private boolean isAddedToWatchlist;
     private boolean isAddedToCart;
     private boolean isCheckedOut;
     private boolean isOutOfStock;
@@ -90,6 +91,10 @@ public class BookEntity {
 
     public void setUpdateDateTime( String updateDateTime ) { this.updateDateTime = updateDateTime; }
 
+    public boolean isAddedToWatchlist() { return isAddedToWatchlist; }
+
+    public void setAddedToWatchlist( boolean addedToWatchlist ) { isAddedToWatchlist = addedToWatchlist; }
+
     @Override
     public String toString() {
         return "BookEntity{" +
@@ -103,6 +108,7 @@ public class BookEntity {
                 ", checkOutDateTime='" + checkOutDateTime + '\'' +
                 ", updateDateTime='" + updateDateTime + '\'' +
                 ", isRemoved=" + isRemoved +
+                ", isAddedToWatchlist=" + isAddedToWatchlist +
                 ", isAddedToCart=" + isAddedToCart +
                 ", isCheckedOut=" + isCheckedOut +
                 ", isOutOfStock=" + isOutOfStock +

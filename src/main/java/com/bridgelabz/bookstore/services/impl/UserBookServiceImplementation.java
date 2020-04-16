@@ -47,8 +47,10 @@ public class UserBookServiceImplementation implements IUserBookServices {
     public boolean isUserBookAddedToBag( String token, long bookId ) {
         Optional<BookEntity> fetchedValidBook = adminBookService.validBook (bookId);
         Optional<UserEntity> fetchedAuthenticatedUser = userService.getAuthenticateUserWithRoleUser (token);
-//        not added just add it
-        if (!fetchedValidBook.get ().isAddedToCart ()) {
+//        not added to bag just add it
+        if (!fetchedValidBook.get ().isAddedToCart () &&
+                !fetchedValidBook.get ().isOutOfStock () &&
+                !fetchedValidBook.get ().isRemoved ()) {
             fetchedValidBook.get ().setAddedToCart (true);
             fetchedValidBook.get ().setUpdateDateTime (Util.currentDateTime ());
             fetchedAuthenticatedUser.get ().getBooksList ().add (fetchedValidBook.get ());
@@ -58,6 +60,25 @@ public class UserBookServiceImplementation implements IUserBookServices {
 //        if book is added then remove from bag
         fetchedValidBook.get ().setAddedToCart (false);
         fetchedValidBook.get ().setUpdateDateTime (Util.currentDateTime ());
+        fetchedAuthenticatedUser.get ().getBooksList ().remove (fetchedValidBook.get ());
+        bookRepository.saveAndFlush (fetchedValidBook.get ());
+        return false;
+    }
+
+    @Override
+    public boolean isUserBookAddedToWatchlist( String token, long bookId ) {
+        Optional<BookEntity> fetchedValidBook = adminBookService.validBook (bookId);
+        Optional<UserEntity> fetchedAuthenticatedUser = userService.getAuthenticateUserWithRoleUser (token);
+//        if not added to watchlist and not removed by admin
+        if (!fetchedValidBook.get ().isAddedToWatchlist () &&
+                !fetchedValidBook.get ().isRemoved () ) {
+            fetchedValidBook.get ().setAddedToWatchlist (true);
+            fetchedAuthenticatedUser.get ().getBooksList ().add (fetchedValidBook.get ());
+            bookRepository.saveAndFlush (fetchedValidBook.get ());
+            return true;
+        }
+//        already added to watchlist
+        fetchedValidBook.get ().setAddedToWatchlist (false);
         fetchedAuthenticatedUser.get ().getBooksList ().remove (fetchedValidBook.get ());
         bookRepository.saveAndFlush (fetchedValidBook.get ());
         return false;

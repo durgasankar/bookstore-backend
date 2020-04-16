@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserBookOperationsController {
 
     @Autowired
-   private IUserBookServices userBookServices;
+    private IUserBookServices userBookServices;
 
     @PutMapping("/cart/{id}")
     public ResponseEntity<Response> addOrRemoveBookFromBag( @RequestHeader("token") final String token, @RequestParam("id") final long bookId ) {
@@ -35,6 +35,17 @@ public class UserBookOperationsController {
         }
         return ResponseEntity.ok ()
                 .body (new Response ("Book added to cart successfully!", 200));
+    }
+
+    @PutMapping("/watchlist/{id}")
+    public ResponseEntity<Response> addOrRemoveBookFromWatchList( @RequestHeader("token") final String token, @RequestParam("id") final long bookId ) {
+        boolean isAddedToWatchList = userBookServices.isUserBookAddedToWatchlist (token, bookId);
+        if (!isAddedToWatchList) {
+            return ResponseEntity.status (HttpStatus.ACCEPTED)
+                    .body (new Response ("Book removed from watchlist successfully!", 202));
+        }
+        return ResponseEntity.ok ()
+                .body (new Response ("Book added to watchlist successfully!", 200));
     }
 
 }
