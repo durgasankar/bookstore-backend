@@ -68,7 +68,7 @@ public class AdminBookServiceImplementation implements IAdminBookService {
      * @param token as String input parameter
      * @return Boolean
      */
-    private boolean isAdminUser( final String token ) {
+    boolean isAdminUser( final String token ) {
         Optional<UserEntity> fetchedUser = getAuthenticateUser (token);
         if (fetchedUser.isPresent ()) {
             return fetchedUser.get ().getRoles ().contains (Roles.ROLE_ADMIN);
@@ -82,7 +82,7 @@ public class AdminBookServiceImplementation implements IAdminBookService {
      * @param token as String input parameter
      * @return Optional<UserEntity>
      */
-    private Optional<UserEntity> getAuthenticateUser( final String token ) {
+    Optional<UserEntity> getAuthenticateUser( final String token ) {
         return userRepository.findOneByUserName (jwtTokenProvider.getUserName (token));
     }
 
@@ -116,7 +116,7 @@ public class AdminBookServiceImplementation implements IAdminBookService {
      * @return Optional<BookEntity>
      * @throws BookNotFoundException If book not found
      */
-    private Optional<BookEntity> validBook( final long bookId ) throws BookNotFoundException{
+    Optional<BookEntity> validBook( final long bookId ) throws BookNotFoundException {
         Optional<BookEntity> fetchedBook = bookRepository.findById (bookId);
         if (fetchedBook.isPresent ())
             return fetchedBook;

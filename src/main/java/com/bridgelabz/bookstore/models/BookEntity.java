@@ -76,7 +76,7 @@ public class BookEntity {
 
     public List<UserEntity> getUsersList() { return usersList; }
 
-    public void setUsersList( List<UserEntity> usersList ) { this.usersList = usersList; }
+    public void setUsersList(UserEntity userEntity ) { this.usersList.add(userEntity); }
 
     public double getPrice() { return price; }
 

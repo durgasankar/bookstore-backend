@@ -158,7 +158,7 @@ public class UserServiceImplementation implements IUserService {
      * @param token as String input parameter
      * @return Optional<UserEntity>
      */
-    private Optional<UserEntity> getAuthenticateUserWithRoleUser( final String token )
+    Optional<UserEntity> getAuthenticateUserWithRoleUser( final String token )
             throws UserAuthenticationException, UserNotFoundException {
         Optional<UserEntity> fetchedUser = userRepository.findOneByUserName (jwtTokenProvider.getUserName (token));
         if (fetchedUser.isPresent ()) {
