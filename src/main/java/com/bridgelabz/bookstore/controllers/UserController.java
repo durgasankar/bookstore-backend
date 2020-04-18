@@ -26,12 +26,13 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     @Autowired
     private IUserService userService;
 
-    @PostMapping("/registration")
+    @PostMapping("/signup")
     public ResponseEntity<Response> registration( @RequestBody final UserDto userDto ) {
         boolean isRegistered = userService.register (userDto);
         if (!isRegistered) {
@@ -52,7 +53,7 @@ public class UserController {
                 .body (new Response ("Invalid verification attempt", 406));
     }
 
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public ResponseEntity<LoginResponse> login( @RequestBody final LoginDto loginDto ) {
         UserLoginInfo userLoginInfo = userService.login (loginDto);
         if (!userLoginInfo.getToken ().isEmpty ()) {
