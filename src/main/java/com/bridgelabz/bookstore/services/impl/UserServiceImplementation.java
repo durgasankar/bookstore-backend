@@ -8,7 +8,6 @@ import com.bridgelabz.bookstore.exceptions.InvalidCredentialsException;
 import com.bridgelabz.bookstore.exceptions.UserAuthenticationException;
 import com.bridgelabz.bookstore.exceptions.UserNotFoundException;
 import com.bridgelabz.bookstore.models.Address;
-import com.bridgelabz.bookstore.models.Roles;
 import com.bridgelabz.bookstore.models.UserEntity;
 import com.bridgelabz.bookstore.repositories.AddressRepository;
 import com.bridgelabz.bookstore.repositories.UserRepository;
@@ -84,7 +83,7 @@ public class UserServiceImplementation implements IUserService {
         String emailId = fetchedUser.getEmailId ();
         String bodyContent = Util.createLink (
                 Util.IP_ADDRESS + Util.SPRING_PORT_NUMBER + Util.REGISTRATION_VERIFICATION_LINK,
-                jwtTokenProvider.createToken (fetchedUser.getUserName (), fetchedUser.getRoles ()));
+                jwtTokenProvider.createToken (fetchedUser.getUserName (), fetchedUser.getRole ()));
         String subject = Util.REGISTRATION_EMAIL_SUBJECT;
         return new MailObject (emailId, subject, bodyContent);
     }
@@ -127,7 +126,7 @@ public class UserServiceImplementation implements IUserService {
             if (passwordEncoder.matches (loginDto.getPassword (), fetchedUser.get ().getPassword ())) {
 //                verified
                 if (fetchedUser.get ().isVerified ()) {
-                    String createdToken = jwtTokenProvider.createToken (fetchedUser.get ().getUserName (), fetchedUser.get ().getRoles ());
+                    String createdToken = jwtTokenProvider.createToken (fetchedUser.get ().getUserName (), fetchedUser.get ().getRole ());
                     return new UserLoginInfo (createdToken, fetchedUser.get ().getFirstName ());
                 }
 //            user is valid but not verified.
@@ -161,7 +160,7 @@ public class UserServiceImplementation implements IUserService {
             throws UserAuthenticationException, UserNotFoundException {
         Optional<UserEntity> fetchedUser = userRepository.findOneByUserName (jwtTokenProvider.getUserName (token));
         if (fetchedUser.isPresent ()) {
-            if (fetchedUser.get ().getRoles ().contains (Roles.ROLE_USER)) {
+            if (fetchedUser.get ().getRole ().contains (Util.ROLE_USER)) {
                 return fetchedUser;
             }
             throw new UserAuthenticationException ("Oops...User is not authorized for Operation!", HttpStatus.UNAUTHORIZED);

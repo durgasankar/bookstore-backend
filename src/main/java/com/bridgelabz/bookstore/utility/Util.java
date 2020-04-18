@@ -29,6 +29,8 @@ public class Util {
     public static final String REGISTRATION_EMAIL_SUBJECT = "Registration Verification Link";
     public static final String USER_NOT_FOUND_EXCEPTION_MESSAGE = "Oops...User not found!";
     public static final String BOOK_NOT_FOUND_EXCEPTION_MESSAGE = "Oops...Book not found!";
+    public static final String ROLE_ADMIN = "admin";
+    public static final String ROLE_USER = "user";
 
 
     /**

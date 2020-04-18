@@ -1,11 +1,8 @@
 package com.bridgelabz.bookstore.dto;
 
-import com.bridgelabz.bookstore.models.Roles;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.List;
 
 /**
  * User Registration DTO class which has the parameters which user will give the data
@@ -25,7 +22,7 @@ public class UserDto {
     @NotNull(message = "field should not be empty")
     private long mobileNumber;
     private String userName;
-    private List<Roles> roles;
+    private String role;
 
     public String getFirstName() {
         return firstName;
@@ -75,13 +72,9 @@ public class UserDto {
         this.userName = userName;
     }
 
-    public List<Roles> getRoles() {
-        return roles;
-    }
+    public String getRole() { return role; }
 
-    public void setRoles( List<Roles> roles ) {
-        this.roles = roles;
-    }
+    public void setRole( String role ) { this.role = role; }
 
     @Override
     public String toString() {
@@ -90,9 +83,9 @@ public class UserDto {
                 ", lastName='" + lastName + '\'' +
                 ", emailId='" + emailId + '\'' +
                 ", password='" + password + '\'' +
-                ", mobileNumber='" + mobileNumber + '\'' +
+                ", mobileNumber=" + mobileNumber +
                 ", userName='" + userName + '\'' +
-                ", roles=" + roles +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

@@ -1,18 +1,15 @@
 package com.bridgelabz.bookstore.security;
 
 import com.bridgelabz.bookstore.exceptions.UserAuthenticationException;
-import com.bridgelabz.bookstore.models.Roles;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * -> Verify the access token's signature
@@ -33,13 +30,13 @@ public class JwtTokenProvider {
 //    @Autowired
 //    private MyUserDetails myUserDetails;
 
-    public String createToken( String userName, List<Roles> roles ) {
+    public String createToken( String userName, String role ) {
         Claims claims = Jwts.claims ().setSubject (userName);
 //        claims.put ("auth", roles.stream ()
 //                .map (role -> new SimpleGrantedAuthority (role.getAuthority ()))
 //                .filter (Objects :: nonNull)
 //                .collect (Collectors.toList ()));
-        claims.put ("auth", roles);
+        claims.put ("auth", role);
         Date now = new Date ();
         Date validity = new Date (now.getTime () + VALIDITY_PERIOD_IN_MILLISECOND);
         return Jwts.builder ()

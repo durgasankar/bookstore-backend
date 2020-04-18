@@ -6,7 +6,6 @@ import com.bridgelabz.bookstore.exceptions.BookStoreException;
 import com.bridgelabz.bookstore.exceptions.UserAuthenticationException;
 import com.bridgelabz.bookstore.exceptions.UserNotFoundException;
 import com.bridgelabz.bookstore.models.AdminBookEntity;
-import com.bridgelabz.bookstore.models.Roles;
 import com.bridgelabz.bookstore.models.UserEntity;
 import com.bridgelabz.bookstore.repositories.AdminBookRepository;
 import com.bridgelabz.bookstore.repositories.UserRepository;
@@ -72,7 +71,7 @@ public class AdminBookServiceImplementation implements IAdminBookService {
     boolean isAdminUser( final String token ) {
         Optional<UserEntity> fetchedUser = getAuthenticateUser (token);
         if (fetchedUser.isPresent ()) {
-            return fetchedUser.get ().getRoles ().contains (Roles.ROLE_ADMIN);
+            return fetchedUser.get ().getRole ().contains (Util.ROLE_ADMIN);
         }
         throw new UserNotFoundException (Util.USER_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND);
     }

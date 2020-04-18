@@ -41,9 +41,7 @@ public class UserEntity {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private List<Address> addresses;
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
-    private List<Roles> roles;
+    private String role;
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "users_books_mappings",
@@ -52,7 +50,6 @@ public class UserEntity {
 
     public UserEntity() {
         this.addresses = new ArrayList<> ();
-        this.roles = new LinkedList<> ();
         this.booksList = new ArrayList<>();
     }
 
@@ -136,13 +133,9 @@ public class UserEntity {
         this.addresses = addresses;
     }
 
-    public List<Roles> getRoles() {
-        return roles;
-    }
+    public String getRole() { return role; }
 
-    public void setRoles( List<Roles> roles ) {
-        this.roles = roles;
-    }
+    public void setRole( String role ) { this.role = role; }
 
     public List<UserBookEntity> getBooksList() { return booksList; }
 
@@ -161,7 +154,7 @@ public class UserEntity {
                 ", createdDateTime='" + createdDateTime + '\'' +
                 ", isVerified=" + isVerified +
                 ", addresses=" + addresses +
-                ", roles=" + roles +
+                ", role='" + role + '\'' +
                 ", booksList=" + booksList +
                 '}';
     }
