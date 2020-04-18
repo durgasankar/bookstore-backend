@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -82,7 +83,7 @@ public class UserServiceImplementation implements IUserService {
     private MailObject mailContent( final UserEntity fetchedUser ) {
         String emailId = fetchedUser.getEmailId ();
         String bodyContent = Util.createLink (
-                Util.IP_ADDRESS + Util.SPRING_PORT_NUMBER + Util.REGISTRATION_VERIFICATION_LINK,
+                Util.IP_ADDRESS + Util.ANGULAR_PORT_NUMBER + Util.REGISTRATION_VERIFICATION_LINK,
                 jwtTokenProvider.createToken (fetchedUser.getUserName (), fetchedUser.getRole ()));
         String subject = Util.REGISTRATION_EMAIL_SUBJECT;
         return new MailObject (emailId, subject, bodyContent);
@@ -127,9 +128,9 @@ public class UserServiceImplementation implements IUserService {
 //                verified
                 if (fetchedUser.get ().isVerified ()) {
                     String createdToken = jwtTokenProvider.createToken (fetchedUser.get ().getUserName (), fetchedUser.get ().getRole ());
-                    return new UserLoginInfo (createdToken, fetchedUser.get ().getFirstName ());
+                    return new UserLoginInfo (createdToken, fetchedUser.get ().getFirstName (), fetchedUser.get ().getRole ());
                 }
-//            user is valid but not verified.
+//                user is valid but not verified.
                 rabbitMQSender.send (mailContent (fetchedUser.get ()));
                 return new UserLoginInfo ("", fetchedUser.get ().getFirstName ());
             }
@@ -145,7 +146,7 @@ public class UserServiceImplementation implements IUserService {
         Optional<UserEntity> fetchedUser = getAuthenticateUserWithRoleUser (token);
         Address newAddress = new Address ();
         BeanUtils.copyProperties (addressDto, newAddress);
-        fetchedUser.get ().getAddresses ().add(newAddress);
+        fetchedUser.get ().getAddresses ().add (newAddress);
         addressRepository.saveAndFlush (newAddress);
         return true;
     }
@@ -171,7 +172,7 @@ public class UserServiceImplementation implements IUserService {
     @Override
     public boolean isUserAddressRemoved( String addressId, String token ) throws BookStoreException {
         Optional<UserEntity> fetchedUser = getAuthenticateUserWithRoleUser (token);
-        addressRepository.removeAddress(addressId, fetchedUser.get ().getUserId ());
+        addressRepository.removeAddress (addressId, fetchedUser.get ().getUserId ());
         return true;
     }
 

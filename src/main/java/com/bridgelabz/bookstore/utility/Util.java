@@ -23,7 +23,7 @@ public class Util {
     public static final String IP_ADDRESS = "http://localhost:";
     public static final String SENDER_EMAIL_ID = "jc100.r20jc134@gmail.com";
     public static final String SENDER_PASSWORD = "r20jc134";
-//    public static final String ANGULAR_PORT_NUMBER = "4200";
+    public static final String ANGULAR_PORT_NUMBER = "4200";
     public static final String SPRING_PORT_NUMBER = "8081";
     public static final String REGISTRATION_VERIFICATION_LINK = "/verification";
     public static final String REGISTRATION_EMAIL_SUBJECT = "Registration Verification Link";

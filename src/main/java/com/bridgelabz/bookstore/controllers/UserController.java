@@ -46,8 +46,7 @@ public class UserController {
     @PutMapping("/verification/{token}")
     public ResponseEntity<Response> verifyRegistration( @PathVariable("token") final String token ) {
         if (userService.isVerifiedUser (token)) {
-            return ResponseEntity.status (HttpStatus.OK)
-                    .body (new Response ("account verified successfully.", 200));
+            return ResponseEntity.ok (new Response ("Account verified successfully.", 200));
         }
         return ResponseEntity.status (HttpStatus.NOT_ACCEPTABLE)
                 .body (new Response ("Invalid verification attempt", 406));
