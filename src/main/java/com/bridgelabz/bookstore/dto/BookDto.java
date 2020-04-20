@@ -1,5 +1,7 @@
 package com.bridgelabz.bookstore.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * Model class for book dto
  *
@@ -11,9 +13,9 @@ public class BookDto {
 
     private String title;
     private String author;
-    private String imageUrl;
     private double price;
     private int availableQuantity;
+    private MultipartFile file;
 
     public BookDto() {
     }
@@ -26,10 +28,6 @@ public class BookDto {
 
     public void setAuthor( String author ) { this.author = author; }
 
-    public String getImageUrl() { return imageUrl; }
-
-    public void setImageUrl( String imageUrl ) { this.imageUrl = imageUrl; }
-
     public double getPrice() { return price; }
 
     public void setPrice( double price ) { this.price = price; }
@@ -38,14 +36,18 @@ public class BookDto {
 
     public void setAvailableQuantity( int availableQuantity ) { this.availableQuantity = availableQuantity; }
 
+    public MultipartFile getFile() { return file; }
+
+    public void setFile( MultipartFile file ) { this.file = file; }
+
     @Override
     public String toString() {
         return "BookDto{" +
                 "title='" + title + '\'' +
                 ", author='" + author + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
                 ", price=" + price +
                 ", availableQuantity=" + availableQuantity +
+                ", file=" + file +
                 '}';
     }
 }

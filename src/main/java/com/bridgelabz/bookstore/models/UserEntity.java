@@ -6,7 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -47,7 +46,6 @@ public class UserEntity {
     @JoinTable(name = "users_books_mappings",
             joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "book_id")})
     private List<UserBookEntity> booksList;
-
     public UserEntity() {
         this.addresses = new ArrayList<> ();
         this.booksList = new ArrayList<>();

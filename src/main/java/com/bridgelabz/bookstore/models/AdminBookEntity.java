@@ -14,7 +14,6 @@ public class AdminBookEntity {
     private String bookCode;
     private String title;
     private String Author;
-    private String imageUrl;
     private int availableQuantity;
     private double price;
     @Column(length = 30)
@@ -23,6 +22,8 @@ public class AdminBookEntity {
     private String updateDateTime;
     private boolean isRemoved;
     private boolean isOutOfStock;
+    @Embedded
+    private BookImage bookImage;
 
     public AdminBookEntity() { }
 
@@ -37,10 +38,6 @@ public class AdminBookEntity {
     public String getAuthor() { return Author; }
 
     public void setAuthor( String author ) { Author = author; }
-
-    public String getImageUrl() { return imageUrl; }
-
-    public void setImageUrl( String imageUrl ) { this.imageUrl = imageUrl; }
 
     public int getAvailableQuantity() { return availableQuantity; }
 
@@ -70,6 +67,10 @@ public class AdminBookEntity {
 
     public void setBookCode( String bookCode ) { this.bookCode = bookCode; }
 
+    public BookImage getBookImage() { return bookImage; }
+
+    public void setBookImage( BookImage bookImage ) { this.bookImage = bookImage; }
+
     @Override
     public String toString() {
         return "AdminBookEntity{" +
@@ -77,13 +78,13 @@ public class AdminBookEntity {
                 ", bookCode='" + bookCode + '\'' +
                 ", title='" + title + '\'' +
                 ", Author='" + Author + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
                 ", availableQuantity=" + availableQuantity +
                 ", price=" + price +
                 ", additionDateTime='" + additionDateTime + '\'' +
                 ", updateDateTime='" + updateDateTime + '\'' +
                 ", isRemoved=" + isRemoved +
                 ", isOutOfStock=" + isOutOfStock +
+                ", bookImage=" + bookImage +
                 '}';
     }
 }

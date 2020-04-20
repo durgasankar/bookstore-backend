@@ -5,6 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Book model which has the parameters which will hit with the database
+ *
+ * @author Durgasankar Mishra
+ * @version 1.1
+ * @created 2020-04-19
+ */
+
 @Entity
 @Table(name = "user_books")
 public class UserBookEntity {

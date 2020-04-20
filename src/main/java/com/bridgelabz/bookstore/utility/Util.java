@@ -1,9 +1,14 @@
 package com.bridgelabz.bookstore.utility;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.UUID;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 /**
  * This singleton class has the all the reusable methods => createLink
@@ -66,6 +71,41 @@ public class Util {
         String inputId = "#Du";
         inputId += random.nextInt (10000000);
         return inputId;
+    }
+
+    public static byte[] compressBytes( byte[] bytes ) {
+        Deflater deflater = new Deflater ();
+        deflater.setInput (bytes);
+        deflater.finish ();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream (bytes.length);
+        byte[] buffer = new byte[1024];
+        while (!deflater.finished ()) {
+            int count = deflater.deflate (buffer);
+            outputStream.write (buffer, 0, count);
+        }
+        try {
+            outputStream.close ();
+        } catch (IOException e) {
+            e.printStackTrace ();
+        }
+        System.out.println ("compressed size : " + outputStream.toByteArray ().length);
+        return outputStream.toByteArray ();
+    }
+
+    public static byte[] deCompressBytes( byte[] bytes ) {
+        Inflater inflater = new Inflater ();
+        inflater.setInput (bytes);
+        byte[] buffer = new byte[1024];
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream (bytes.length);
+        try {
+            while (!inflater.finished ()) {
+                int count = inflater.inflate (buffer);
+                outputStream.write (buffer, 0, count);
+            }
+        } catch (DataFormatException e) {
+            e.printStackTrace ();
+        }
+        return outputStream.toByteArray ();
     }
 
 }
