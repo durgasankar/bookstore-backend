@@ -22,8 +22,9 @@ public class AdminBookEntity {
     private String updateDateTime;
     private boolean isRemoved;
     private boolean isOutOfStock;
-    @Embedded
-    private BookImage bookImage;
+//    @Embedded
+//    private BookImage bookImage;
+    private String imageUrl;
 
     public AdminBookEntity() { }
 
@@ -67,9 +68,13 @@ public class AdminBookEntity {
 
     public void setBookCode( String bookCode ) { this.bookCode = bookCode; }
 
-    public BookImage getBookImage() { return bookImage; }
+//    public BookImage getBookImage() { return bookImage; }
+//
+//    public void setBookImage( BookImage bookImage ) { this.bookImage = bookImage; }
 
-    public void setBookImage( BookImage bookImage ) { this.bookImage = bookImage; }
+    public String getImageUrl() { return imageUrl; }
+
+    public void setImageUrl( String imageUrl ) { this.imageUrl = imageUrl; }
 
     @Override
     public String toString() {
@@ -84,7 +89,8 @@ public class AdminBookEntity {
                 ", updateDateTime='" + updateDateTime + '\'' +
                 ", isRemoved=" + isRemoved +
                 ", isOutOfStock=" + isOutOfStock +
-                ", bookImage=" + bookImage +
+//                ", bookImage=" + bookImage +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }

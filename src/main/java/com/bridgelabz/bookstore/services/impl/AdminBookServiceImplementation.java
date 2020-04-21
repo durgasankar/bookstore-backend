@@ -6,7 +6,6 @@ import com.bridgelabz.bookstore.exceptions.BookStoreException;
 import com.bridgelabz.bookstore.exceptions.UserAuthenticationException;
 import com.bridgelabz.bookstore.exceptions.UserNotFoundException;
 import com.bridgelabz.bookstore.models.AdminBookEntity;
-import com.bridgelabz.bookstore.models.BookImage;
 import com.bridgelabz.bookstore.models.UserEntity;
 import com.bridgelabz.bookstore.repositories.AdminBookRepository;
 import com.bridgelabz.bookstore.repositories.UserRepository;
@@ -17,8 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
+;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,14 +55,7 @@ public class AdminBookServiceImplementation implements IAdminBookService {
             AdminBookEntity newBook = new AdminBookEntity ();
             BeanUtils.copyProperties (bookDto, newBook);
             newBook.setBookCode (Util.idGenerator ());
-            try {
-                newBook.setBookImage (new BookImage (
-                        bookDto.getFile ().getOriginalFilename (),
-                        bookDto.getFile ().getContentType (),
-                        bookDto.getFile ().getBytes ()));
-            } catch (IOException e) {
-                e.printStackTrace ();
-            }
+            System.out.println ("book data : " + bookDto);
             newBook.setAdditionDateTime (Util.currentDateTime ());
             adminBookRepository.save (newBook);
             return true;
