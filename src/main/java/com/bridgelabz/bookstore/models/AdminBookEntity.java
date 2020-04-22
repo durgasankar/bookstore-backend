@@ -22,6 +22,7 @@ public class AdminBookEntity {
     private String updateDateTime;
     private boolean isRemoved;
     private boolean isOutOfStock;
+    private boolean isAdmin;
 //    @Embedded
 //    private BookImage bookImage;
     private String imageUrl;
@@ -76,6 +77,10 @@ public class AdminBookEntity {
 
     public void setImageUrl( String imageUrl ) { this.imageUrl = imageUrl; }
 
+    public boolean isAdmin() { return isAdmin; }
+
+    public void setAdmin( boolean admin ) { isAdmin = admin; }
+
     @Override
     public String toString() {
         return "AdminBookEntity{" +
@@ -88,6 +93,7 @@ public class AdminBookEntity {
                 ", additionDateTime='" + additionDateTime + '\'' +
                 ", updateDateTime='" + updateDateTime + '\'' +
                 ", isRemoved=" + isRemoved +
+                ", isAdmin=" + isAdmin +
                 ", isOutOfStock=" + isOutOfStock +
 //                ", bookImage=" + bookImage +
                 ", imageUrl='" + imageUrl + '\'' +

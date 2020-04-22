@@ -56,6 +56,7 @@ public class AdminBookServiceImplementation implements IAdminBookService {
             BeanUtils.copyProperties (bookDto, newBook);
             newBook.setBookCode (Util.idGenerator ());
             System.out.println ("book data : " + bookDto);
+            newBook.setAdmin (true);
             newBook.setAdditionDateTime (Util.currentDateTime ());
             adminBookRepository.save (newBook);
             return true;
