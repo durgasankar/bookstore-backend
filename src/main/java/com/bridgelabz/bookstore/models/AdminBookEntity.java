@@ -23,8 +23,9 @@ public class AdminBookEntity {
     private boolean isRemoved;
     private boolean isOutOfStock;
     private boolean isAdmin;
-//    @Embedded
+    //    @Embedded
 //    private BookImage bookImage;
+    @Column(length = 10000)
     private String imageUrl;
 
     public AdminBookEntity() { }

@@ -33,9 +33,9 @@ public class UserBookOperationsController {
         boolean isAddedToBag = userBookServices.isUserBookAddedToBag (token, bookId);
         if (!isAddedToBag)
             return ResponseEntity.status (HttpStatus.ACCEPTED)
-                    .body (new Response ("Book removed from cart successfully!", 202));
+                    .body (new Response ("removed from cart!", 202));
         return ResponseEntity.ok ()
-                .body (new Response ("Book added to cart successfully!", 200));
+                .body (new Response ("added to cart successfully!", 200));
     }
 
     @PutMapping("/watchlist")
@@ -44,9 +44,9 @@ public class UserBookOperationsController {
         boolean isAddedToWatchList = userBookServices.isUserBookAddedToWatchlist (token, bookId);
         if (!isAddedToWatchList)
             return ResponseEntity.status (HttpStatus.ACCEPTED)
-                    .body (new Response ("Book removed from watchlist successfully!", 202));
+                    .body (new Response ("removed from watchlist!", 202));
         return ResponseEntity.ok ()
-                .body (new Response ("Book added to watchlist successfully!", 200));
+                .body (new Response ("added to watchlist.", 200));
     }
 
     @GetMapping("/cart")
@@ -72,6 +72,12 @@ public class UserBookOperationsController {
         }
         return ResponseEntity.badRequest ()
                 .body (new Response ("Oops... Error processing order!", HttpStatus.BAD_REQUEST));
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<Response> getAllUserBooksOfUser(@RequestHeader("token") final String token){
+        return ResponseEntity
+                .ok (new Response ("Books are : ", HttpStatus.OK, userBookServices.getAllBooksFromStore (token)));
     }
 
 }

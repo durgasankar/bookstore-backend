@@ -163,4 +163,10 @@ public class UserBookServiceImplementation implements IUserBookServices {
         }
     }
 
+    @Override
+    public List<UserBookEntity> getAllBooksFromStore( String token ) {
+        userService.getAuthenticateUserWithRoleUser (token);
+        return usersBookRepository.findAll ();
+    }
+
 }

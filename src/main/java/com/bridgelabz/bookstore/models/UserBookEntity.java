@@ -24,7 +24,8 @@ public class UserBookEntity {
     @Column(unique = true, nullable = false)
     private String bookCode;
     private String title;
-    private String Author;
+    private String author;
+    @Column(length = 10000)
     private String imageUrl;
     private String orderNumber;
     private int purchasedQuantity;
@@ -36,6 +37,7 @@ public class UserBookEntity {
     private boolean isAddedToWatchlist;
     private boolean isAddedToCart;
     private boolean isCheckedOut;
+    private long serialNumber;
     @JsonIgnore
     @ManyToMany(mappedBy = "booksList", fetch = FetchType.LAZY)
     private List<UserEntity> usersList;
@@ -46,13 +48,17 @@ public class UserBookEntity {
 
     public void setBookId( long bookId ) { this.bookId = bookId; }
 
+    public long getSerialNumber() { return serialNumber; }
+
+    public void setSerialNumber( long serialNumber ) { this.serialNumber = serialNumber; }
+
     public String getTitle() { return title; }
 
     public void setTitle( String title ) { this.title = title; }
 
-    public String getAuthor() { return Author; }
+    public String getAuthor() { return author; }
 
-    public void setAuthor( String author ) { Author = author; }
+    public void setAuthor( String author ) { this.author = author; }
 
     public String getImageUrl() { return imageUrl; }
 
@@ -99,13 +105,14 @@ public class UserBookEntity {
 
     public void setBookCode( String bookCode ) { this.bookCode = bookCode; }
 
+
     @Override
     public String toString() {
         return "UserBookEntity{" +
                 "bookId=" + bookId +
                 ", bookCode='" + bookCode + '\'' +
                 ", title='" + title + '\'' +
-                ", Author='" + Author + '\'' +
+                ", author='" + author + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", orderNumber='" + orderNumber + '\'' +
                 ", purchasedQuantity=" + purchasedQuantity +
@@ -115,6 +122,7 @@ public class UserBookEntity {
                 ", isAddedToWatchlist=" + isAddedToWatchlist +
                 ", isAddedToCart=" + isAddedToCart +
                 ", isCheckedOut=" + isCheckedOut +
+                ", serialNumber=" + serialNumber +
                 ", usersList=" + usersList +
                 '}';
     }

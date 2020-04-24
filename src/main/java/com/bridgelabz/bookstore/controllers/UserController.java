@@ -60,7 +60,7 @@ public class UserController {
                     .body (new LoginResponse ("Login Successful!", 200, userLoginInfo));
         }
         return ResponseEntity.status (HttpStatus.NON_AUTHORITATIVE_INFORMATION)
-                .body (new LoginResponse ("Oops...user not verified. Check your mail for verification!", 203, userLoginInfo));
+                .body (new LoginResponse ("Check your mail for verification!", 203, userLoginInfo));
     }
 
     @PostMapping("/address/add")
