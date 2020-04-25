@@ -38,6 +38,14 @@ public class UserBookOperationsController {
                 .body (new Response ("added to cart successfully!", 200));
     }
 
+    @PatchMapping("/cart")
+    public ResponseEntity<Response> removeFromBagOfUser( @RequestHeader("token") final String token,
+                                                         @RequestParam("id") final String bookCode ) {
+        userBookServices.removeFromBag (token, bookCode);
+        return ResponseEntity.ok ()
+                .body (new Response ("removed from cart!", 200));
+    }
+
     @PutMapping("/watchlist")
     public ResponseEntity<Response> addOrRemoveBookFromWatchList( @RequestHeader("token") final String token,
                                                                   @RequestParam("id") final long bookId ) {

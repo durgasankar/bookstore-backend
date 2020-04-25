@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstore.services.impl;
 
+import com.bridgelabz.bookstore.exceptions.BookNotFoundException;
 import com.bridgelabz.bookstore.models.AdminBookEntity;
 import com.bridgelabz.bookstore.models.UserBookEntity;
 import com.bridgelabz.bookstore.models.UserEntity;
@@ -10,6 +11,7 @@ import com.bridgelabz.bookstore.services.IUserBookServices;
 import com.bridgelabz.bookstore.utility.Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -167,6 +169,27 @@ public class UserBookServiceImplementation implements IUserBookServices {
     public List<UserBookEntity> getAllBooksFromStore( String token ) {
         userService.getAuthenticateUserWithRoleUser (token);
         return usersBookRepository.findAll ();
+    }
+
+    @Override
+    public void removeFromBag( String token, String bookCode ) {
+        Optional<UserEntity> fetchedAuthenticatedUser = userService.getAuthenticateUserWithRoleUser (token);
+        Optional<AdminBookEntity> fetchedValidAdminBook = validBookCheckByBookCode (bookCode);
+        UserBookEntity fetchedUserBook = checkAndCreateNewBookForUserAndCopyContent (
+                fetchedValidAdminBook.get ().getBookCode (), fetchedValidAdminBook);
+//        if book is added then remove from bag
+        fetchedUserBook.setAddedToCart (false);
+        fetchedUserBook.setUpdateDateTime (Util.currentDateTime ());
+        fetchedAuthenticatedUser.get ().getBooksList ().remove (fetchedUserBook);
+        usersBookRepository.saveAndFlush (fetchedUserBook);
+
+    }
+
+    Optional<AdminBookEntity> validBookCheckByBookCode( final String bookCode ) throws BookNotFoundException {
+        Optional<AdminBookEntity> fetchedBook = adminBookRepository.findOneByBookCode (bookCode);
+        if (fetchedBook.isPresent ())
+            return fetchedBook;
+        throw new BookNotFoundException (Util.BOOK_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND);
     }
 
 }

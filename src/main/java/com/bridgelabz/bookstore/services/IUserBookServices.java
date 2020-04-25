@@ -17,4 +17,6 @@ public interface IUserBookServices {
     String setPurchasingQuantity( String token, int quantity, long bookId );
 
     List<UserBookEntity> getAllBooksFromStore( String token );
+
+    void removeFromBag( String token, String bookCode );
 }
