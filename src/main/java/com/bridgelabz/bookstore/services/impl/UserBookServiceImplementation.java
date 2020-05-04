@@ -7,12 +7,16 @@ import com.bridgelabz.bookstore.models.UserEntity;
 import com.bridgelabz.bookstore.repositories.AdminBookRepository;
 import com.bridgelabz.bookstore.repositories.UsersBookRepository;
 import com.bridgelabz.bookstore.repositories.UserRepository;
+import com.bridgelabz.bookstore.responses.MailObject;
 import com.bridgelabz.bookstore.services.IUserBookServices;
+import com.bridgelabz.bookstore.utility.RabbitMQSender;
 import com.bridgelabz.bookstore.utility.Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -47,6 +51,9 @@ public class UserBookServiceImplementation implements IUserBookServices {
 
     @Autowired
     private UserServiceImplementation userService;
+
+    @Autowired
+    private RabbitMQSender rabbitMQSender;
 
 
     @Override
@@ -115,7 +122,7 @@ public class UserBookServiceImplementation implements IUserBookServices {
                 .get ()
                 .getBooksList ()
                 .stream ()
-//                .filter (UserBookEntity :: isAddedToCart)
+                .filter (UserBookEntity :: isAddedToCart)
                 .filter (fetchedBook -> fetchedBook.getUpdateDateTime ()
                         .compareTo (Util.currentDateTime ()) < 0 /*&& !fetchedBook.isOutOfStock ()*/)
                 .collect (Collectors.toList ());
@@ -131,38 +138,6 @@ public class UserBookServiceImplementation implements IUserBookServices {
                 .filter (fetchedBook -> fetchedBook.getUpdateDateTime ()
                         .compareTo (Util.currentDateTime ()) < 0)
                 .collect (Collectors.toList ());
-    }
-
-    @Override
-    public String setPurchasingQuantity( String token, int quantity, long bookId ) {
-        Optional<AdminBookEntity> fetchedValidAdminBook = adminBookService.validBook (bookId);
-        userService.getAuthenticateUserWithRoleUser (token);
-        UserBookEntity fetchedUserBook = checkAndCreateNewBookForUserAndCopyContent (
-                fetchedValidAdminBook.get ().getBookCode (), fetchedValidAdminBook);
-        if (fetchedValidAdminBook.get ().getAvailableQuantity () >= quantity) {
-//            updating quantity in admin book
-            fetchedValidAdminBook.get ().setAvailableQuantity (fetchedValidAdminBook.get ().getAvailableQuantity () - quantity);
-            fetchedUserBook.setPurchasedQuantity (quantity);
-            fetchedUserBook.setCheckedOut (true);
-            fetchedUserBook.setCheckOutDateTime (Util.currentDateTime ());
-            fetchedUserBook.setOrderNumber (Util.generateOrderNumber ());
-            usersBookRepository.saveAndFlush (fetchedUserBook);
-            adminBookRepository.saveAndFlush (fetchedValidAdminBook.get ());
-            return fetchedUserBook.getOrderNumber ();
-        } else if (fetchedValidAdminBook.get ().getAvailableQuantity () == quantity && !fetchedValidAdminBook.get ().isOutOfStock ()) {
-//            updating quantity in admin book
-            fetchedValidAdminBook.get ().setAvailableQuantity (fetchedValidAdminBook.get ().getAvailableQuantity () - quantity);
-            fetchedUserBook.setPurchasedQuantity (quantity);
-            fetchedUserBook.setCheckedOut (true);
-            fetchedUserBook.setCheckOutDateTime (Util.currentDateTime ());
-            fetchedUserBook.setOrderNumber (Util.generateOrderNumber ());
-            fetchedValidAdminBook.get ().setOutOfStock (true);
-            usersBookRepository.save (fetchedUserBook);
-            adminBookRepository.saveAndFlush (fetchedValidAdminBook.get ());
-            return fetchedUserBook.getOrderNumber ();
-        } else {
-            return "";
-        }
     }
 
     @Override
@@ -191,5 +166,70 @@ public class UserBookServiceImplementation implements IUserBookServices {
             return fetchedBook;
         throw new BookNotFoundException (Util.BOOK_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND);
     }
+
+    @Override
+    public String placeOrder( String token, List<UserBookEntity> orderBooks ) {
+        Optional<UserEntity> fetchedAuthenticatedUser = userService.getAuthenticateUserWithRoleUser (token);
+        List<AdminBookEntity> fetchedAdminBooks = validateBooksFromAdminList (orderBooks);
+//        fetched all user's cart books
+        final String orderNumber = Util.generateOrderNumber ();
+        for (AdminBookEntity adminBook : fetchedAdminBooks) {
+            for (UserBookEntity userBook : orderBooks) {
+                if (adminBook.getBookCode ().equals (userBook.getBookCode ())) {
+                    buyOperationOnBook (adminBook, orderNumber, userBook);
+                    usersBookRepository.saveAndFlush (userBook);
+                    adminBookRepository.saveAndFlush (adminBook);
+                }
+            }
+        }
+//        sending mail
+        if (rabbitMQSender.send (sendOrderConfirmationMail (fetchedAuthenticatedUser.get (), orderBooks, orderNumber))) {
+            return orderNumber;
+        }
+        return "";
+    }
+
+
+    private MailObject sendOrderConfirmationMail( final UserEntity fetchedUser, final List<UserBookEntity> orderBooks, final String orderNumber ) {
+        String emailId = fetchedUser.getEmailId ();
+        String bodyContent = "";
+        for (UserBookEntity book : orderBooks) {
+            String bookOrderInfo = "Book code : " + book.getBookCode ()
+                    + ",Title : " + book.getTitle ()
+                    + ",Price : " + book.getPrice ()
+                    + ",Quantity : " + book.getPurchasedQuantity ()
+                    + ",Total : " + book.getPrice () * book.getPurchasedQuantity () + ".\n";
+            bodyContent += bookOrderInfo;
+        }
+        String subject = "Order Confirmation Mail, Order number : " + orderNumber;
+        return new MailObject (emailId, subject, bodyContent);
+    }
+
+    private void buyOperationOnBook( AdminBookEntity adminBook, String orderNumber, UserBookEntity userBook ) {
+        if (adminBook.getAvailableQuantity () == userBook.getPurchasedQuantity ()) {
+            adminBook.setAvailableQuantity (0);
+            adminBook.setOutOfStock (true);
+        } else {
+            adminBook.setAvailableQuantity (adminBook.getAvailableQuantity () - userBook.getPurchasedQuantity ());
+        }
+        userBook.setCheckedOut (true);
+        userBook.setAddedToCart (false);
+        userBook.setOrderNumber (orderNumber);
+        userBook.setCheckOutDateTime (Util.currentDateTime ());
+        adminBook.setUpdateDateTime (Util.currentDateTime ());
+        userBook.setUpdateDateTime (Util.currentDateTime ());
+    }
+
+    private List<AdminBookEntity> validateBooksFromAdminList( List<UserBookEntity> orderBooks ) {
+        List<AdminBookEntity> fetchedAdminBooks = new LinkedList<> ();
+        for (UserBookEntity userBookEntity : orderBooks) {
+            Optional<AdminBookEntity> fetchedBook = adminBookRepository.findOneByBookCode (userBookEntity.getBookCode ());
+            if (fetchedBook.isPresent ())
+                fetchedAdminBooks.add (fetchedBook.get ());
+            throw new BookNotFoundException (Util.BOOK_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND);
+        }
+        return fetchedAdminBooks;
+    }
+
 
 }

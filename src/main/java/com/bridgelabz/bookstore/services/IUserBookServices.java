@@ -14,9 +14,9 @@ public interface IUserBookServices {
 
     List<UserBookEntity> getWatchlistBooks( String token );
 
-    String setPurchasingQuantity( String token, int quantity, long bookId );
-
     List<UserBookEntity> getAllBooksFromStore( String token );
 
     void removeFromBag( String token, String bookCode );
+
+    String placeOrder( String token, List<UserBookEntity> orderBooks );
 }

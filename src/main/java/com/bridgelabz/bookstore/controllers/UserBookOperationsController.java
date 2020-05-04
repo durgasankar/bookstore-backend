@@ -1,11 +1,14 @@
 package com.bridgelabz.bookstore.controllers;
 
+import com.bridgelabz.bookstore.models.UserBookEntity;
 import com.bridgelabz.bookstore.responses.Response;
 import com.bridgelabz.bookstore.services.IUserBookServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * By using the object reference of service class This class has the
@@ -69,11 +72,10 @@ public class UserBookOperationsController {
                 (new Response ("Watchlist books : ", HttpStatus.OK, userBookServices.getWatchlistBooks (token)));
     }
 
-    @PutMapping("/checkout")
-    public ResponseEntity<Response> setQuantityAndCheckout( @RequestHeader("token") final String token,
-                                                            @RequestParam("quantity") final int quantity,
-                                                            @RequestParam("id") final long bookId ) {
-        String orderNumber = userBookServices.setPurchasingQuantity (token, quantity, bookId);
+    @PostMapping("/checkout")
+    public ResponseEntity<Response> checkOutAndPlaceOrder( @RequestHeader("token") final String token,
+                                                           @RequestBody  List<UserBookEntity> orderBooks) {
+        String orderNumber = userBookServices.placeOrder (token, orderBooks);
         if (!orderNumber.isEmpty ()) {
             return ResponseEntity
                     .ok (new Response ("Order processed Successfully!", HttpStatus.OK, orderNumber));
