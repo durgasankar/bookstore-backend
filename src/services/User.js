@@ -4,8 +4,8 @@ import User from "../models/User.js";
 export const registerUser = async data => {
     const { firstName, lastName, email, mobileNumber, gender, password } = data;
     // existing user checker
-    const existingUser = User.hasOne({ where: email })
-    if (existingUser) {
+    const existingUser = await User.count({ where: { email } });
+    if (existingUser > 0) {
         throw new Error('User already exist.')
     }
     // Password hashing

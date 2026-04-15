@@ -18,7 +18,7 @@ export const registerRoute = {
             await registerUser(req.body);
             res.status(201).json({ message: 'Registration successful.' });
         } catch (error) {
-            es.status(400).json({ message: error.message });
+            res.status(400).json({ message: error.message });
         }
     }
 }
