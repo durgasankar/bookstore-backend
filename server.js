@@ -20,6 +20,8 @@ routes.forEach(route => {
 const startServer = async () => {
     try {
         await sequelize.authenticate();
+        // create table if not exist
+        await sequelize.sync()
         console.log('✅ Database connected successfully');
         app.listen(PORT, () => {
             console.log(`🚀 Server started on port ${PORT}`);
