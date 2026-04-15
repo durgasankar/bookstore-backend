@@ -1,7 +1,7 @@
 import { registerUser } from "../services/User.js";
 
 export const registerRoute = {
-    path: '/api/register',
+    path: '/api/users/register',
     method: 'post',
     handler: async (req, res) => {
         try {
