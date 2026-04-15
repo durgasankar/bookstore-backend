@@ -1,23 +1,9 @@
-import express from 'express';
 import dotenv from 'dotenv';
-import cors from "cors";
 import sequelize from './src/configs/database.js';
-import { routes } from './src/Routes/IndexRoute.js';
+import app from './src/app.js';
 
 dotenv.config();
-
 const PORT = process.env.PORT || 5000;
-
-const app = express();
-
-app.use(cors());
-
-app.use(express.json());
-
-// Register routes
-routes.forEach(route => {
-    app[route.method](route.path, route.handler);
-});
 
 // ✅ Start server ONLY if DB connects
 const startServer = async () => {
