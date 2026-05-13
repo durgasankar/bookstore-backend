@@ -5,7 +5,7 @@ import app from './src/app.js';
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
-// ✅ Start server ONLY if DB connects
+// starting server after db connection
 const startServer = async () => {
     try {
         await sequelize.authenticate();
@@ -17,7 +17,7 @@ const startServer = async () => {
         });
     } catch (error) {
         console.error('❌ Database connection failed:', error.message);
-        process.exit(1); // stop app if DB fails
+        process.exit(1); // stopping the process if db fails.
     }
 };
 
