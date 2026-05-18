@@ -12,6 +12,7 @@ A RESTful API for managing books with authentication using Node.js, Express, and
 - Filter books by status
 - Swagger API documentation
 - Validation & error handling
+- Search books by title
 
 ---
 
@@ -75,6 +76,7 @@ GET /books
 GET /books/:id
 PATCH /books/:id/status
 DELETE /books/:id
+GET /books/search/:title
 
 ---
 
