@@ -17,11 +17,11 @@ export const createBook = async (data, userId) => {
 
 // Get all books with filter
 export const getAllBooks = async (userId, status) => {
-    let whereClause = { user_id: userId };
+    let where = { user_id: userId, is_deleted: false };
     if (status) {
-        whereClause.read_status = status.toUpperCase();
+        where.read_status = status.toUpperCase();
     }
-    const books = await Book.findAll({ where: whereClause });
+    const books = await Book.findAll({ where });
     return books;
 };
 
@@ -51,8 +51,9 @@ export const updateBookStatus = async (id, status) => {
 // Delete book
 export const deleteBook = async (id) => {
     const book = await Book.findByPk(id);
-    if (!book) {
+    if (!book || book.is_deleted) {
         throw new Error("Book not found");
     }
-    await book.destroy();
+    book.is_deleted = true;
+    await book.save();
 };

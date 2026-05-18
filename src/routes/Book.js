@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { authenticate } from "../middlewares/auth.js";
+import { validateCreateBook } from '../middlewares/validate.js';
 import {
     createBookController,
     getAllBooksController,
@@ -44,7 +45,7 @@ router.use(authenticate);
  *       400:
  *         description: Bad request
  */
-router.post('/', createBookController);
+router.post('/', validateCreateBook, createBookController);
 
 
 /**

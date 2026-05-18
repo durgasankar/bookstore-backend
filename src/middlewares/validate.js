@@ -18,3 +18,13 @@ export const validateLogin = (req, res, next) => {
     }
     next();
 };
+
+export const validateCreateBook = (req, res, next) => {
+    const { title } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({
+            message: 'Book title is required.'
+        });
+    }
+    next();
+};

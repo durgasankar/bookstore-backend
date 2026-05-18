@@ -20,6 +20,7 @@ const router = Router();
  *             type: object
  *             required:
  *               - firstName
+ *               - lastName
  *               - email
  *               - mobileNumber
  *               - gender

@@ -16,7 +16,7 @@ const Book = sequelize.define('Book', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    read_status: {
+    readStatus: {
         type: DataTypes.ENUM('READ', 'UNREAD'),
         defaultValue: 'UNREAD'
     },
@@ -27,6 +27,10 @@ const Book = sequelize.define('Book', {
     addedOn: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
+    },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 }, {
     tableName: 'books',
