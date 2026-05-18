@@ -28,6 +28,9 @@ const router = Router();
  *               firstName:
  *                 type: string
  *                 example: John
+ *               lastName:
+ *                 type: string
+ *                 example: Cena
  *               email:
  *                 type: string
  *                 example: username@email.com
@@ -76,4 +79,3 @@ router.post('/register', validateRegister, registerUserController);
 router.post('/login', validateLogin, loginUserController);
 
 export default router;
-``
