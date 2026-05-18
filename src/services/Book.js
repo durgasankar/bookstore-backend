@@ -1,4 +1,5 @@
 import Book from "../models/Book.js";
+import { Op } from "sequelize";
 
 // Create book
 export const createBook = async (data, userId) => {
@@ -15,8 +16,8 @@ export const createBook = async (data, userId) => {
     return book;
 };
 
-// Get all books with filter
-export const getAllBooks = async (userId, status) => {
+// Get all books with filter default empty
+export const getAllBooks = async (status) => {
     let where = { is_deleted: false };
     if (status) {
         where.readStatus = status.toUpperCase();
@@ -57,4 +58,20 @@ export const deleteBook = async (id) => {
     }
     book.isDeleted = true;
     await book.save();
+};
+
+// Search book by title
+export const searchBooks = async (title) => {
+    const books = await Book.findAll({
+        where: {
+            is_deleted: false,
+            title: {
+                [Op.iLike]: `%${title}%`,
+            },
+        },
+    });
+    if (!books.length) {
+        throw new Error("No matching books found");
+    }
+    return books;
 };

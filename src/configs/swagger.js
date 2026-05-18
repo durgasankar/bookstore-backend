@@ -128,6 +128,16 @@ const options = {
                     },
                     responses: { 200: {}, 400: { description: "Invalid" } }
                 }
+            },
+
+            "/books/search": {
+                get: {
+                    tags: ["Books"],
+                    security: [{ bearerAuth: [] }],
+                    summary: "Search books by title",
+                    parameters: [{ name: "title", in: "query", required: true, example: 'Atomic' }],
+                    responses: { 200: {}, 400: { description: 'invalid' } }
+                }
             }
         },
         tags: [{ name: "Users" }, { name: "Books" }]

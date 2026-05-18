@@ -3,7 +3,8 @@ import {
     getAllBooks,
     getBookById,
     updateBookStatus,
-    deleteBook
+    deleteBook,
+    searchBooks
 } from "../services/Book.js";
 
 // Create
@@ -20,7 +21,7 @@ export const createBookController = async (req, res) => {
 export const getAllBooksController = async (req, res) => {
     try {
         const { status } = req.query;
-        const books = await getAllBooks(req.user?.userId, status);
+        const books = await getAllBooks(status);
         res.status(200).json(books);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -57,4 +58,14 @@ export const deleteBookController = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 };
-``
+
+// Search
+export const searchBooksController = async (req, res) => {
+    try {
+        const { title } = req.query;
+        const books = await searchBooks(title);
+        res.status(200).json({ message: 'Search results', books });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};

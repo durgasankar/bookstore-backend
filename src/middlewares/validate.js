@@ -41,3 +41,17 @@ export const validateStatus = (req, res, next) => {
     }
     next();
 }
+
+export const validateSearchInput = (req, res, next) => {
+    console.log('object')
+    const { title } = req.query;
+    if (!title) {
+        return res.status(400).json({
+            message: 'Search param is required.'
+        });
+    }
+    if (title.length < 3) {
+        return res.status(400).json({ message: "Search input should be atleast 3 characters." });
+    }
+    next();
+}
