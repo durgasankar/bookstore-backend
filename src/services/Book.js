@@ -17,9 +17,9 @@ export const createBook = async (data, userId) => {
 
 // Get all books with filter
 export const getAllBooks = async (userId, status) => {
-    let where = { user_id: userId, is_deleted: false };
+    let where = { is_deleted: false };
     if (status) {
-        where.read_status = status.toUpperCase();
+        where.readStatus = status.toUpperCase();
     }
     const books = await Book.findAll({ where });
     return books;
@@ -37,13 +37,14 @@ export const getBookById = async (id) => {
 // Update status
 export const updateBookStatus = async (id, status) => {
     const book = await Book.findByPk(id);
+    console.log(book)
     if (!book) {
         throw new Error("Book not found");
     }
     if (!['READ', 'UNREAD'].includes(status.toUpperCase())) {
         throw new Error("Invalid status");
     }
-    book.read_status = status.toUpperCase();
+    book.readStatus = status.toUpperCase();
     await book.save();
     return book;
 };
@@ -51,9 +52,9 @@ export const updateBookStatus = async (id, status) => {
 // Delete book
 export const deleteBook = async (id) => {
     const book = await Book.findByPk(id);
-    if (!book || book.is_deleted) {
+    if (!book || book.isDeleted) {
         throw new Error("Book not found");
     }
-    book.is_deleted = true;
+    book.isDeleted = true;
     await book.save();
 };

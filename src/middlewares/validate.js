@@ -21,10 +21,23 @@ export const validateLogin = (req, res, next) => {
 
 export const validateCreateBook = (req, res, next) => {
     const { title } = req.body;
-    if (!email || !password) {
+    if (!title) {
         return res.status(400).json({
             message: 'Book title is required.'
         });
     }
     next();
 };
+
+export const validateStatus = (req, res, next) => {
+    const { status } = req.body;
+    if (!status) {
+        return res.status(400).json({
+            message: 'Book title is required.'
+        });
+    }
+    if (!['READ', 'UNREAD'].includes(status)) {
+        return res.status(400).json({ message: "Invalid status value" });
+    }
+    next();
+}

@@ -17,8 +17,8 @@ app.use('/api', routes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // global error handling for 500 statuses
-app.use((err, req, res, next) => {
-    res.status(500).json({ message: 'Internal Server Error!' })
-})
+// app.use((err, req, res, next) => {
+//     res.status(500).json({ message: 'Internal Server Error!' })
+// })
 
 export default app;
